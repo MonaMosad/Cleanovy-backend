@@ -1,4 +1,5 @@
-require('dotenv').config();
+// require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -6,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 const connectDB = require('./config/db');
+const e = require('express');
 
 connectDB();
 
@@ -33,6 +35,6 @@ app.use((err, req, res, next) => {
   });
 });
 
+module.exports = app;
 // ── Start server ──────────────────────────────────────────────────────────────
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`  Server running on port ${PORT}`));
+
