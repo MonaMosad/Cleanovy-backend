@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema(
   {
+    // ✅ FIX: made required — an item cannot exist without an order
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
+      required: true,
     },
 
     service: {
@@ -14,11 +16,11 @@ const orderItemSchema = new mongoose.Schema(
       required: true,
     },
 
-    quantity: { type: Number, default: 1 },
+    quantity: { type: Number, default: 1, min: 1 },
 
-    unit_price: { type: Number, required: true },
+    unit_price: { type: Number, required: true, min: 0 },
 
-    total_price: { type: Number, required: true },
+    total_price: { type: Number, required: true, min: 0 }, // quantity * unit_price
   },
   { timestamps: true }
 );

@@ -1,0 +1,105 @@
+[
+  {
+    "_id": {
+      "$oid": "a10000000000000000000001"
+    },
+    "provider": {
+      "$oid": "dd0000000000000000000001"
+    },
+    "client": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "address": {
+      "$oid": "cc0000000000000000000001"
+    },
+    "delivery": {
+      "$oid": "a30000000000000000000001"
+    },
+    "status": "delivered",
+    "provider_price": 125,
+    "app_price": 10,
+    "discount": 0,
+    "shipping_price": 15,
+    "total_price": 150,
+    "pickup_time": {
+      "$date": "2025-01-20T10:00:00.000Z"
+    },
+    "delivery_time": {
+      "$date": "2025-01-21T18:00:00.000Z"
+    },
+    "notes": "Please handle the suit carefully.",
+    "cancel_reason": null,
+    "createdAt": {
+      "$date": "2025-01-19T14:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-21T18:10:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "a10000000000000000000002"
+    },
+    "provider": {
+      "$oid": "dd0000000000000000000001"
+    },
+    "client": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa02"
+    },
+    "address": {
+      "$oid": "cc0000000000000000000003"
+    },
+    "delivery": null,
+    "status": "in_progress",
+    "provider_price": 90,
+    "app_price": 8,
+    "discount": 5,
+    "shipping_price": 15,
+    "total_price": 108,
+    "pickup_time": {
+      "$date": "2025-01-22T09:00:00.000Z"
+    },
+    "delivery_time": null,
+    "notes": "Ring doorbell twice.",
+    "cancel_reason": null,
+    "createdAt": {
+      "$date": "2025-01-21T20:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-22T11:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "a10000000000000000000003"
+    },
+    "provider": {
+      "$oid": "dd0000000000000000000002"
+    },
+    "client": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "address": {
+      "$oid": "cc0000000000000000000001"
+    },
+    "delivery": null,
+    "status": "pending",
+    "provider_price": 36,
+    "app_price": 5,
+    "discount": 0,
+    "shipping_price": 15,
+    "total_price": 56,
+    "pickup_time": {
+      "$date": "2025-01-25T11:00:00.000Z"
+    },
+    "delivery_time": null,
+    "notes": null,
+    "cancel_reason": null,
+    "createdAt": {
+      "$date": "2025-01-23T08:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-23T08:00:00.000Z"
+    }
+  }
+]
