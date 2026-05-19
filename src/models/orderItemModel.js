@@ -1,6 +1,6 @@
 // models/orderItem.model.js
-import mongoose from "mongoose";
-
+  // import mongoose from "mongoose";
+require("mongoose");
 const orderItemSchema = new mongoose.Schema(
   {
     order: {

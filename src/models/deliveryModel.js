@@ -1,6 +1,6 @@
 // models/delivery.model.js
-import mongoose from "mongoose";
-
+// import mongoose from "mongoose";
+require("mongoose");
 const deliverySchema = new mongoose.Schema(
   {
     provider: {

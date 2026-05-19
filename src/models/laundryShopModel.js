@@ -1,6 +1,6 @@
 // models/laundryShop.model.js
-import mongoose from "mongoose";
-
+  // import mongoose from "mongoose";
+require("mongoose");
 const laundryShopSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

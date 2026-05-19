@@ -1,6 +1,6 @@
 // models/providerService.model.js
-import mongoose from "mongoose";
-
+  // import mongoose from "mongoose";
+require("mongoose");
 const providerServiceSchema = new mongoose.Schema(
   {
     provider: {

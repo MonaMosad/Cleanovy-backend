@@ -1,6 +1,6 @@
 // models/order.model.js
-import mongoose from "mongoose";
-
+// import mongoose from "mongoose";
+require("mongoose");
 const orderSchema = new mongoose.Schema(
   {
     provider: {

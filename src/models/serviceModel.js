@@ -1,6 +1,6 @@
 // models/service.model.js
-import mongoose from "mongoose";
-
+// import mongoose from "mongoose";
+require("mongoose");
 const serviceSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },

@@ -1,6 +1,6 @@
 // models/review.model.js
-import mongoose from "mongoose";
-
+    // import mongoose from "mongoose";
+require("mongoose");
 const reviewSchema = new mongoose.Schema(
   {
     provider: {
