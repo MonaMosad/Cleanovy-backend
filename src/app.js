@@ -1,40 +1,69 @@
-// require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const passport = require("./config/passport");
+const { errorHandler, notFound } = require("./middleware/errorMiddleware");
+const { apiLimiter } = require("./middleware/rateLimitMiddleware");
+const logger = require("./config/logger");
 
-const express = require('express');
-const mongoose = require('mongoose');
-const cookieParser = require('cookie-parser');
+// ─── Route imports  
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-const connectDB = require('./config/db');
-const e = require('express');
+// ─── Security Middleware  
+app.use(helmet());
 
-connectDB();
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-// ── Body & Cookie parsers ─────────────────────────────────────────────────────
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// ─── Body Parsers 
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
+// ─── HTTP Logger  
+if (process.env.NODE_ENV !== "test") {
+  app.use(
+    morgan("combined", {
+      stream: { write: (msg) => logger.info(msg.trim()) },
+    })
+  );
+}
 
+// ─── Passport  
+app.use(passport.initialize());
 
-// ── Routes ────────────────────────────────────────────────────────────────────
+// ─── Static Files  
+app.use("/uploads", express.static("uploads"));
 
+// ─── Global Rate Limit  
+app.use(`/api/${process.env.API_VERSION}`, apiLimiter);
 
-// ── 404 handler ───────────────────────────────────────────────────────────────
-app.use((req, res) => {
-  res.status(404).json({ status: 'fail', message: `Route ${req.originalUrl} not found.` });
-});
-
-// ── Global error handler ──────────────────────────────────────────────────────
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.statusCode || 500).json({
-    status: 'error',
-    message: err.message || 'Internal server error',
+// ─── Health Check  
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Nadif API is running 🚀",
+    version: process.env.API_VERSION,
+    env: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
   });
 });
 
-module.exports = app;
-// ── Start server ──────────────────────────────────────────────────────────────
+// ─── API Routes   
+const API_PREFIX = `/api/${process.env.API_VERSION}`;
 
+app.use(`${API_PREFIX}/auth`, authRoutes);
+
+// ─── 404 & Error Handlers 
+app.use(notFound);
+app.use(errorHandler);
+
+module.exports = app;
