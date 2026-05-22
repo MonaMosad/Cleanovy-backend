@@ -1,6 +1,6 @@
 // models/providerService.model.js
-  // import mongoose from "mongoose";
-require("mongoose");
+const mongoose = require("mongoose");
+
 const providerServiceSchema = new mongoose.Schema(
   {
     provider: {
@@ -22,4 +22,5 @@ const providerServiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("ProviderService", providerServiceSchema);
+const ProviderService = mongoose.model("ProviderService", providerServiceSchema);
+module.exports = ProviderService;

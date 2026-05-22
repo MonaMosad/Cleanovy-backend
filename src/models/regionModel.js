@@ -1,6 +1,6 @@
 // models/region.model.js
-  // import mongoose from "mongoose";
-require("mongoose");
+const mongoose = require("mongoose");
+
 const regionSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -8,4 +8,5 @@ const regionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Region", regionSchema);
+const Region = mongoose.model("Region", regionSchema);
+module.exports = Region;

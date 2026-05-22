@@ -1,6 +1,6 @@
 // models/review.model.js
-    // import mongoose from "mongoose";
-require("mongoose");
+const mongoose = require("mongoose");
+
 const reviewSchema = new mongoose.Schema(
   {
     provider: {
@@ -29,4 +29,5 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Review", reviewSchema);
+const Review = mongoose.model("Review", reviewSchema);
+module.exports = Review;
