@@ -1,5 +1,5 @@
 // models/laundryShop.model.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const laundryShopSchema = new mongoose.Schema(
   {
@@ -18,4 +18,5 @@ const laundryShopSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("LaundryShop", laundryShopSchema);
+const LaundryShop = mongoose.model("LaundryShop", laundryShopSchema);
+module.exports = LaundryShop;

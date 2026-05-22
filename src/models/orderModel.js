@@ -1,5 +1,5 @@
 // models/order.model.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
@@ -15,20 +15,25 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
-    status: {
-      type: String,
-      enum: [
-        "pending",
-        "accepted",
-        "picked_up",
-        "in_progress",
-        "ready",
-        "out_for_delivery",
-        "delivered",
-        "cancelled",
-      ],
-      default: "pending",
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+        required: true,
     },
+
+   status: {
+  type: String,
+  enum: [
+    "pending",
+    "accepted",
+    "in_progress",
+    "ready",
+    "out_for_delivery",
+    "delivered",
+    "cancelled"
+  ],
+    default: "pending",
+   },
 
     provider_price: { type: Number, default: 0 },
     app_price: { type: Number, default: 0 },
@@ -38,6 +43,10 @@ const orderSchema = new mongoose.Schema(
     total_price: { type: Number, default: 0 },
 
     pickup_time: { type: Date, required: true },
+    delivery : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Delivery",
+    },
     delivery_time: { type: Date },
 
     notes: { type: String },
@@ -45,4 +54,6 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Order", orderSchema);
+
+ const Order = mongoose.model("Order", orderSchema);
+ module.exports = Order;
