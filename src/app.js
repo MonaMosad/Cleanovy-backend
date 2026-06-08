@@ -13,6 +13,11 @@ const fs = require("fs");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 
+const dashboardRoutes = require('./routes/provider/dashboardRoutes');
+const ordersRoutes = require('./routes/provider/ordersRoutes');
+// const servicesRoutes = require('./routes/provider/servicesRoutes');
+// const discountsRoutes = require('./routes/provider/discountsRoutes');
+
 const app = express();
 
 // ─── Ensure uploads directory exists
