@@ -6,18 +6,33 @@ const passport = require("./config/passport");
 const { errorHandler, notFound } = require("./middleware/errorMiddleware");
 const { apiLimiter } = require("./middleware/rateLimitMiddleware");
 const logger = require("./config/logger");
+const path = require("path");
+const fs = require("fs");
 
 // ─── Route imports  
 const authRoutes = require("./routes/authRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 const app = express();
 
-// ─── Security Middleware  
-app.use(helmet());
+// ─── Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, "..", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
+// ─── Helmet - مع السماح للصور تتحمل من الفرونت اند
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginEmbedderPolicy: false,
+  })
+);
+
+// ─── CORS
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: true, // السماح لكل الـ origins في development
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -40,8 +55,11 @@ if (process.env.NODE_ENV !== "test") {
 // ─── Passport  
 app.use(passport.initialize());
 
-// ─── Static Files  
-app.use("/uploads", express.static("uploads"));
+// ─── Static Files - مع header يسمح بالتحميل من أي origin
+app.use("/uploads", (req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  next();
+}, express.static(uploadsDir));
 
 // ─── Global Rate Limit  
 app.use(`/api/${process.env.API_VERSION}`, apiLimiter);
@@ -50,7 +68,7 @@ app.use(`/api/${process.env.API_VERSION}`, apiLimiter);
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "Nadif API is running 🚀",
+    message: "Cleanovy API is running",
     version: process.env.API_VERSION,
     env: process.env.NODE_ENV,
     timestamp: new Date().toISOString(),
@@ -59,8 +77,8 @@ app.get("/health", (req, res) => {
 
 // ─── API Routes   
 const API_PREFIX = `/api/${process.env.API_VERSION}`;
-
 app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/profile`, profileRoutes);
 
 // ─── 404 & Error Handlers 
 app.use(notFound);

@@ -1,4 +1,4 @@
- const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "رقم الهاتف مطلوب"],
       unique: true,
       sparse: true,
-      match: [/^05\d{8}$/, "رقم الهاتف غير صالح"],
+      match: [/^01\d{9}$/, "رقم الهاتف المصري غير صالح"],
     },
 
     email: {
@@ -46,6 +46,13 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: null,
+    },
+
+    // ─── ✅ Address - مضافة دلوقتي
+    address: {
+      type: String,
+      default: null,
+      trim: true,
     },
 
     // ─── Auth Methods  

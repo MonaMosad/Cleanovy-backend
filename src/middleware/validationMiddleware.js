@@ -1,4 +1,4 @@
- const { body, validationResult } = require("express-validator");
+const { body, validationResult } = require("express-validator");
 
 // ─── Handle validation errors  
 const validate = (req, res, next) => {
@@ -20,11 +20,19 @@ exports.validateRegister = [
     .notEmpty().withMessage("الاسم الكامل مطلوب")
     .isLength({ min: 3 }).withMessage("الاسم يجب أن يكون 3 أحرف على الأقل"),
 
-  body("phone")
-    .trim()
-    .notEmpty().withMessage("رقم الهاتف مطلوب")
-    .matches(/^05\d{8}$/).withMessage("رقم الهاتف يجب أن يبدأ بـ 05 ويتكون من 10 أرقام"),
+  // body("phone")
+  //   .trim()
+  //   .notEmpty().withMessage("رقم الهاتف مطلوب")
+  //   .matches(/^05\d{8}$/).withMessage("رقم الهاتف يجب أن يبدأ بـ 05 ويتكون من 10 أرقام"),
 
+  body("phone")
+  .trim()
+  .notEmpty()
+  .withMessage("رقم الهاتف مطلوب")
+  .matches(/^01[0125]\d{8}$/)
+  .withMessage(
+    "رقم الهاتف يجب أن يتكون من 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015"
+  ),
   body("email")
     .trim()
     .notEmpty().withMessage("البريد الإلكتروني مطلوب")
@@ -91,4 +99,31 @@ exports.validateChangePassword = [
     .notEmpty().withMessage("تأكيد كلمة المرور مطلوب"),
 
   validate,
+];
+
+
+// في نهاية الملف، ضيف exports.validateUpdateProfile
+exports.validateUpdateProfile = [
+  body("fullName")
+    .optional()
+    .trim()
+    .isLength({ min: 3 }).withMessage("الاسم يجب أن يكون 3 أحرف على الأقل"),
+
+  // body("phone")
+  //   .optional()
+  //   .trim()
+  //   .matches(/^05\d{8}$/).withMessage("رقم الهاتف يجب أن يبدأ بـ 05 ويتكون من 10 أرقام"),
+  body("phone")
+    .notEmpty()
+    .withMessage("رقم الهاتف مطلوب")
+    .matches(/^01[0125]\d{8}$/)
+    .withMessage(
+      "رقم الهاتف يجب أن يتكون من 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015"
+    ),
+  body("address")
+    .optional()
+    .trim()
+    .isLength({ min: 5 }).withMessage("العنوان يجب أن يكون 5 أحرف على الأقل"),
+
+  validate, // الدالة الموجودة بالفعل في الملف
 ];
