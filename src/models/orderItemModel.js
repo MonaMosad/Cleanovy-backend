@@ -1,6 +1,7 @@
 // models/orderItem.model.js
   // import mongoose from "mongoose";
-require("mongoose");
+// require("mongoose");
+const mongoose = require("mongoose");
 const orderItemSchema = new mongoose.Schema(
   {
     order: {
@@ -23,4 +24,5 @@ const orderItemSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("OrderItem", orderItemSchema);
+// export default mongoose.model("OrderItem", orderItemSchema);
+module.exports = mongoose.model("OrderItem", orderItemSchema);
