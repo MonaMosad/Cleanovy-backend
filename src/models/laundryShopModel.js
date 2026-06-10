@@ -1,11 +1,7 @@
 // models/laundryShop.model.js
-<<<<<<< HEAD
   // import mongoose from "mongoose";
 const mongoose = require("mongoose");
-=======
-const mongoose = require("mongoose");
 
->>>>>>> origin/main
 const laundryShopSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -38,10 +34,5 @@ const laundryShopSchema = new mongoose.Schema(
   
 );
 
-<<<<<<< HEAD
 // export default mongoose.model("LaundryShop", laundryShopSchema);
 module.exports = mongoose.model("LaundryShop", laundryShopSchema);
-=======
-const LaundryShop = mongoose.model("LaundryShop", laundryShopSchema);
-module.exports = LaundryShop;
->>>>>>> origin/main

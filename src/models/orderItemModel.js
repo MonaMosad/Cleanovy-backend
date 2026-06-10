@@ -23,10 +23,5 @@ const orderItemSchema = new mongoose.Schema(
   { timestamps: true,collection: "orderItems" }
 );
 
-<<<<<<< HEAD
 // export default mongoose.model("OrderItem", orderItemSchema);
 module.exports = mongoose.model("OrderItem", orderItemSchema);
-=======
-const OrderItem = mongoose.model("OrderItem", orderItemSchema);
-module.exports = OrderItem;
->>>>>>> origin/main
