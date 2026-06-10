@@ -1,5 +1,6 @@
 // models/laundryShop.model.js
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const workingHoursSchema = new mongoose.Schema(
   {
@@ -25,6 +26,11 @@ const laundryShopSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
 
+    // هل الـ provider موقوف بسبب عمولات غير مسددة؟
+    is_suspended: { type: Boolean, default: false },
+
+    // سبب الإيقاف
+    suspension_reason: { type: String, default: null },
     // Human-readable address string
     address: { type: String, trim: true },
 
@@ -53,6 +59,8 @@ const laundryShopSchema = new mongoose.Schema(
     is_active: { type: Boolean, default: true },
   },
   { timestamps: true }
+
 );
 
-export default mongoose.model("LaundryShop", laundryShopSchema);
+
+module.exports = mongoose.model("LaundryShop", laundryShopSchema);

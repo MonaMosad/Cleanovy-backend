@@ -1,5 +1,5 @@
 // models/review.model.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -43,7 +43,5 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ ADDED: ensures a client can only leave one review per order
-reviewSchema.index({ order: 1, client: 1 }, { unique: true });
-
-export default mongoose.model("Review", reviewSchema);
+const Review = mongoose.model("Review", reviewSchema);
+module.exports = Review;

@@ -1,5 +1,5 @@
 // models/address.model.js
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const addressSchema = new mongoose.Schema(
   {
@@ -23,4 +23,5 @@ const addressSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Address", addressSchema);
+
+module.exports = mongoose.model("Address", addressSchema);

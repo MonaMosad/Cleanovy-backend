@@ -1,6 +1,7 @@
 // models/providerService.model.js
-import mongoose from "mongoose";
-
+  // import mongoose from "mongoose";
+// require("mongoose");
+const mongoose = require("mongoose");
 const providerServiceSchema = new mongoose.Schema(
   {
     provider: {
@@ -29,7 +30,5 @@ const providerServiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ ADDED: compound unique index — a provider can't list the same service twice
-providerServiceSchema.index({ provider: 1, service: 1 }, { unique: true });
-
-export default mongoose.model("ProviderService", providerServiceSchema);
+// export default mongoose.model("ProviderService", providerServiceSchema);
+module.exports = mongoose.model("ProviderService", providerServiceSchema);
