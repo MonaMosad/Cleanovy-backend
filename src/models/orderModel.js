@@ -62,6 +62,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+<<<<<<< HEAD
     provider: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "LaundryShop",
@@ -145,6 +146,12 @@ const orderSchema = new mongoose.Schema(
         "cancelled",
       ],
       default: "pending",
+=======
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+        required: true,
+>>>>>>> origin/main
     },
     delivery_type: {
   type: String,
@@ -153,10 +160,31 @@ const orderSchema = new mongoose.Schema(
   default: "delivery",
 },
 
+<<<<<<< HEAD
 delivery_address: {
   type: String,
   default: null,
 },
+=======
+   status: {
+  type: String,
+  enum: [
+    "pending",
+    "accepted",
+    "in_progress",
+    "ready",
+    "out_for_delivery",
+    "delivered",
+    "cancelled"
+  ],
+    default: "pending",
+   },
+
+    provider_price: { type: Number, default: 0 },
+    app_price: { type: Number, default: 0 },
+    discount: { type: Number, default: 0 },
+    shipping_price: { type: Number, default: 0 },
+>>>>>>> origin/main
 
     // ── Schedule ──────────────────────────────────────────────
     pickup_time: {
@@ -164,10 +192,19 @@ delivery_address: {
       required: true,
     },
 
+<<<<<<< HEAD
     delivery_time: {
       type: Date,
       default: null,
     },
+=======
+    pickup_time: { type: Date, required: true },
+    delivery : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Delivery",
+    },
+    delivery_time: { type: Date },
+>>>>>>> origin/main
 
     notes: {
       type: String,
@@ -178,9 +215,15 @@ delivery_address: {
   { timestamps: true }
 );
 
+<<<<<<< HEAD
 orderSchema.index({ client: 1, status: 1 });
 orderSchema.index({ provider: 1, status: 1 });
 orderSchema.index({ provider: 1, payment_method: 1, status: 1 });
 
 module.exports = mongoose.model("Order", orderSchema);
 
+=======
+
+ const Order = mongoose.model("Order", orderSchema);
+ module.exports = Order;
+>>>>>>> origin/main

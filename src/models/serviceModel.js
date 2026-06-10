@@ -1,6 +1,11 @@
 // models/service.model.js
+<<<<<<< HEAD
 // import mongoose from "mongoose";
 const mongoose = require("mongoose");
+=======
+const mongoose = require("mongoose");
+
+>>>>>>> origin/main
 const serviceSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -14,5 +19,10 @@ const serviceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+<<<<<<< HEAD
 // export default mongoose.model("Service", serviceSchema);
 module.exports = mongoose.model("Service", serviceSchema);
+=======
+const Service = mongoose.model("Service", serviceSchema);
+module.exports = Service;
+>>>>>>> origin/main
