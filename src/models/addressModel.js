@@ -1,6 +1,6 @@
 // models/address.model.js
-  // import mongoose from "mongoose";
-require("mongoose");
+const mongoose = require("mongoose");
+
 const addressSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -11,4 +11,4 @@ const addressSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Address", addressSchema);
+module.exports = mongoose.model("Address", addressSchema);

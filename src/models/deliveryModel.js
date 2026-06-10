@@ -1,6 +1,6 @@
 // models/delivery.model.js
-// import mongoose from "mongoose";
-require("mongoose");
+const mongoose = require("mongoose");
+
 const deliverySchema = new mongoose.Schema(
   {
     provider: {
@@ -20,4 +20,5 @@ const deliverySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Delivery", deliverySchema);
+const Delivery = mongoose.model("Delivery", deliverySchema);
+module.exports = Delivery;

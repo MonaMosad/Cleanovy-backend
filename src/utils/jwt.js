@@ -1,14 +1,14 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-// ─── Generate Access Token 
+// ─── Generate Access Token  
 const generateAccessToken = (userId, role) => {
   return jwt.sign({ id: userId, role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "7d",
   });
 };
 
-// ─── Generate Refresh Token  
+// ─── Generate Refresh Token ة
 const generateRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "30d",
@@ -30,7 +30,7 @@ const generateRandomToken = () => {
   return crypto.randomBytes(32).toString("hex");
 };
 
-// ─── Hash Token (before storing in DB) 
+// ─── Hash Token (before storing in DB)  
 const hashToken = (token) => {
   return crypto.createHash("sha256").update(token).digest("hex");
 };
@@ -43,3 +43,6 @@ module.exports = {
   generateRandomToken,
   hashToken,
 };
+
+
+

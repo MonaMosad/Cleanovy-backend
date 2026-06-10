@@ -1,7 +1,6 @@
 // models/orderItem.model.js
-  // import mongoose from "mongoose";
-// require("mongoose");
 const mongoose = require("mongoose");
+
 const orderItemSchema = new mongoose.Schema(
   {
     order: {
@@ -11,7 +10,7 @@ const orderItemSchema = new mongoose.Schema(
 
     service: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ProviderService",
+      ref: "Service",
       required: true,
     },
 
@@ -21,7 +20,7 @@ const orderItemSchema = new mongoose.Schema(
 
     total_price: { type: Number, required: true },
   },
-  { timestamps: true }
+  { timestamps: true,collection: "orderItems" }
 );
 
 // export default mongoose.model("OrderItem", orderItemSchema);

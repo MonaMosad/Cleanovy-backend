@@ -51,6 +51,7 @@
 // module.exports = mongoose.model("Order", orderSchema);
 
 // src/models/orderModel.js
+// models/order.model.js
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
