@@ -20,7 +20,7 @@ const orderItemSchema = new mongoose.Schema(
 
     total_price: { type: Number, required: true },
   },
-  { timestamps: true,collection: "orderItems" }
+  { timestamps: true }
 );
 
 const OrderItem = mongoose.model("OrderItem", orderItemSchema);
