@@ -2,10 +2,14 @@
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(process.env.DATABASE_URL
+     
+    );
+//     const conn = await mongoose.connect(process.env.MONGODB_URI, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     });
+// >>>>>>> origin/main
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
 

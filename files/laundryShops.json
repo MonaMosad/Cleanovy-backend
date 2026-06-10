@@ -1,0 +1,153 @@
+[
+  {
+    "_id": {
+      "$oid": "dd0000000000000000000001"
+    },
+    "user": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa03"
+    },
+    "region": {
+      "$oid": "bb0000000000000000000001"
+    },
+    "name": "Clean Pro Laundry",
+    "description": "Professional laundry and dry cleaning services with 24h turnaround.",
+    "address": "56 Abbas El-Akkad St, Nasr City, Cairo",
+    "lat": 30.0649,
+    "lng": 31.3399,
+    "phone": "0221456789",
+    "images": [
+      "https://cdn.cleanovy.com/shops/cleanpro/img1.jpg",
+      "https://cdn.cleanovy.com/shops/cleanpro/img2.jpg"
+    ],
+    "logo": "https://cdn.cleanovy.com/shops/cleanpro/logo.png",
+    "working_hours": [
+      {
+        "day": "saturday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "sunday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "monday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "tuesday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "wednesday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "thursday",
+        "open": "09:00",
+        "close": "22:00",
+        "is_closed": false
+      },
+      {
+        "day": "friday",
+        "open": null,
+        "close": null,
+        "is_closed": true
+      }
+    ],
+    "avg_rating": 4.5,
+    "total_reviews": 38,
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-05T08:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-20T10:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "dd0000000000000000000002"
+    },
+    "user": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa04"
+    },
+    "region": {
+      "$oid": "bb0000000000000000000002"
+    },
+    "name": "Fresh & Fold",
+    "description": "Eco-friendly laundry service using organic detergents.",
+    "address": "18 Road 233, Maadi, Cairo",
+    "lat": 29.9621,
+    "lng": 31.2584,
+    "phone": "0225678901",
+    "images": [
+      "https://cdn.cleanovy.com/shops/freshandfold/img1.jpg"
+    ],
+    "logo": "https://cdn.cleanovy.com/shops/freshandfold/logo.png",
+    "working_hours": [
+      {
+        "day": "saturday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "sunday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "monday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "tuesday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "wednesday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "thursday",
+        "open": "08:00",
+        "close": "21:00",
+        "is_closed": false
+      },
+      {
+        "day": "friday",
+        "open": null,
+        "close": null,
+        "is_closed": true
+      }
+    ],
+    "avg_rating": 4.2,
+    "total_reviews": 21,
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-06T08:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-18T10:00:00.000Z"
+    }
+  }
+]

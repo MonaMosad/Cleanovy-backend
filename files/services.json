@@ -1,0 +1,158 @@
+[
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000001"
+    },
+    "name": "Washing",
+    "parent": null,
+    "image": "https://cdn.cleanovy.com/services/washing.png",
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000002"
+    },
+    "name": "Dry Cleaning",
+    "parent": null,
+    "image": "https://cdn.cleanovy.com/services/dryclean.png",
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000003"
+    },
+    "name": "Ironing",
+    "parent": null,
+    "image": "https://cdn.cleanovy.com/services/ironing.png",
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000011"
+    },
+    "name": "Shirt — Washing",
+    "parent": {
+      "$oid": "ee0000000000000000000001"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000012"
+    },
+    "name": "Pants — Washing",
+    "parent": {
+      "$oid": "ee0000000000000000000001"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000013"
+    },
+    "name": "Blanket — Washing",
+    "parent": {
+      "$oid": "ee0000000000000000000001"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000021"
+    },
+    "name": "Suit — Dry Cleaning",
+    "parent": {
+      "$oid": "ee0000000000000000000002"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000022"
+    },
+    "name": "Dress — Dry Cleaning",
+    "parent": {
+      "$oid": "ee0000000000000000000002"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "ee0000000000000000000031"
+    },
+    "name": "Shirt — Ironing",
+    "parent": {
+      "$oid": "ee0000000000000000000003"
+    },
+    "image": null,
+    "unit": "per_piece",
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  }
+]

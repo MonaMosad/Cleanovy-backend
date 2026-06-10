@@ -1,0 +1,28 @@
+[
+  {
+    "_id": {
+      "$oid": "a40000000000000000000001"
+    },
+    "provider": {
+      "$oid": "dd0000000000000000000001"
+    },
+    "order": {
+      "$oid": "a10000000000000000000001"
+    },
+    "client": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "rating": 5,
+    "comment": "Great service! My suit came back perfectly pressed. Will definitely use again.",
+    "provider_reply": "Thank you Ahmed! We appreciate your kind words and look forward to serving you again.",
+    "provider_replied_at": {
+      "$date": "2025-01-22T10:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-01-21T20:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-22T10:00:00.000Z"
+    }
+  }
+]

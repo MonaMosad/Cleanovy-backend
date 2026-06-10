@@ -1,0 +1,107 @@
+[
+  {
+    "_id": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "name": "Ahmed Hassan",
+    "username": "ahmed_hassan",
+    "email": "ahmed@example.com",
+    "password": "$2b$10$hashedpassword1",
+    "phone": "01012345678",
+    "national_id": "29901012345678",
+    "avatar": null,
+    "role": "client",
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-10T08:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-10T08:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa02"
+    },
+    "name": "Sara Mohamed",
+    "username": "sara_m",
+    "email": "sara@example.com",
+    "password": "$2b$10$hashedpassword2",
+    "phone": "01098765432",
+    "national_id": "30005156789012",
+    "avatar": "https://cdn.cleanovy.com/avatars/sara.jpg",
+    "role": "client",
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-12T09:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-12T09:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa03"
+    },
+    "name": "Karim Laundry Owner",
+    "username": "karim_provider",
+    "email": "karim@cleanlaundry.com",
+    "password": "$2b$10$hashedpassword3",
+    "phone": "01155667788",
+    "national_id": "28803014567890",
+    "avatar": null,
+    "role": "provider",
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-05T07:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-05T07:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa04"
+    },
+    "name": "Nour Laundry Owner",
+    "username": "nour_provider",
+    "email": "nour@freshlaundry.com",
+    "password": "$2b$10$hashedpassword4",
+    "phone": "01233445566",
+    "national_id": "29206071234567",
+    "avatar": null,
+    "role": "provider",
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-06T07:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-06T07:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa05"
+    },
+    "name": "Admin Cleanovy",
+    "username": "admin",
+    "email": "admin@cleanovy.com",
+    "password": "$2b$10$hashedpassword5",
+    "phone": "01000000001",
+    "national_id": null,
+    "avatar": null,
+    "role": "admin",
+    "is_verified": true,
+    "is_active": true,
+    "createdAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-01T00:00:00.000Z"
+    }
+  }
+]
