@@ -1,24 +1,4 @@
 
-
-
-// // routes/provider/dashboardRoutes.js
-
-// // في كل route file
-// // router.use(authMiddleware);        // التحقق من التوكن
-// // router.use(providerOnlyMiddleware); // التحقق إنه provider مش client
-
-// const express = require("express");
-// const router = express.Router();
-// const dashboardController = require("../../controllers/provider/dashboardController");
-
-// // GET /provider/dashboard  — KPIs + 7-day revenue chart
-// router.get("/", dashboardController.getDashboardStats);
-
-// module.exports = router;
-
-
-
-
 // routes/provider/dashboardRoutes.js
 
 // TODO: uncomment middleware once auth is active

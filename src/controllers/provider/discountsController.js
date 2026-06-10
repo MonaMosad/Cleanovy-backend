@@ -3,9 +3,6 @@ const DiscountTier = require("../../models/discountTierModel");
 const SpecialEntityDiscount = require("../../models/specialEntityDiscountModel");
 const mongoose = require("mongoose");
 
-// ═══════════════════════════════════════════════
-//  DISCOUNT TIERS (الخصم الكمي)
-// ═══════════════════════════════════════════════
 
 /**
  * GET /provider/discounts/tiers
