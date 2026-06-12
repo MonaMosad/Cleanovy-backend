@@ -1,0 +1,68 @@
+[
+  {
+    "_id": {
+      "$oid": "cc0000000000000000000001"
+    },
+    "user": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "region": {
+      "$oid": "bb0000000000000000000001"
+    },
+    "address": "14 Mostafa El-Nahas St, Apt 5, Floor 2",
+    "label": "Home",
+    "lat": 30.0631,
+    "lng": 31.3416,
+    "is_default": true,
+    "createdAt": {
+      "$date": "2025-01-10T08:05:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-10T08:05:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "cc0000000000000000000002"
+    },
+    "user": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa01"
+    },
+    "region": {
+      "$oid": "bb0000000000000000000003"
+    },
+    "address": "7 Cleopatra St, Building 3",
+    "label": "Work",
+    "lat": 30.0924,
+    "lng": 31.3414,
+    "is_default": false,
+    "createdAt": {
+      "$date": "2025-01-15T10:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-15T10:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "cc0000000000000000000003"
+    },
+    "user": {
+      "$oid": "aaaaaaaaaaaaaaaaaaaaaa02"
+    },
+    "region": {
+      "$oid": "bb0000000000000000000002"
+    },
+    "address": "22 Road 9, Maadi, Floor 1",
+    "label": "Home",
+    "lat": 29.9602,
+    "lng": 31.2569,
+    "is_default": true,
+    "createdAt": {
+      "$date": "2025-01-12T09:10:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-01-12T09:10:00.000Z"
+    }
+  }
+]
