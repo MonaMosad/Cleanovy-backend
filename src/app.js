@@ -175,6 +175,7 @@
 
 // module.exports = app;
 const express = require("express");
+const adminDashboardRoutes = require("./routes/admin/dashboard.routes");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -198,6 +199,7 @@ const orderRoutes = require("./routes/orderRoutes.js");
 const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
 
+const adminUsersRoutes = require("./routes/admin/users.routes");
 const app = express();
 
 // ─── Ensure uploads directory exists ─────────────────────────────────────────
@@ -268,9 +270,17 @@ const API_PREFIX = `/api/${process.env.API_VERSION}`;
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", orderRoutes); 
 
+
+//dashbourd
+app.use("/api/admin/dashboard", adminDashboardRoutes);
+// user (admin)
+
+app.use("/api/admin/users", adminUsersRoutes);
 // مسارات المشروع الأساسية
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);
+
+
 
 // ─── Error Handlers ──────────────────────────────────────────────────────────
 app.use(notFound);
