@@ -11,6 +11,8 @@ const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
 const servicesRoutes = require('./routes/provider/servicesRoutes');
 const discountsRoutes = require('./routes/provider/discountsRoutes');
+const providerProfileRoutes = require('./routes/provider/profileRoutes');
+const providerSettingsRoutes = require('./routes/provider/settingsRoutes');
 
 const app = express();
 
@@ -39,6 +41,8 @@ app.use("/api/v1/provider/dashboard", dashboardRoutes);
 app.use("/api/v1/provider/orders", ordersRoutes);
 app.use("/api/v1/provider/services", servicesRoutes);
 app.use("/api/v1/provider/discounts", discountsRoutes);
+app.use("/api/v1/provider/profile", providerProfileRoutes);
+app.use("/api/v1/provider/settings", providerSettingsRoutes);
 
 
 
