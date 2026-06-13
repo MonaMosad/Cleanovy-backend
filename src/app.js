@@ -8,6 +8,7 @@ const { apiLimiter } = require("./middleware/rateLimitMiddleware");
 const logger = require("./config/logger");
 const path = require("path");
 const fs = require("fs");
+const contactRequestRoutes = require('./routes/contactUsRoutes'); 
 
 // ─── Route imports  
 const authRoutes = require("./routes/authRoutes");
@@ -79,6 +80,9 @@ app.get("/health", (req, res) => {
 const API_PREFIX = `/api/${process.env.API_VERSION}`;
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);
+app.use(`${API_PREFIX}/contact`, contactRequestRoutes);
+//app.use('/api/contact', contactRequestRoutes); 
+
 
 // ─── 404 & Error Handlers 
 app.use(notFound);
