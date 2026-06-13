@@ -425,14 +425,16 @@ const globalErrorHandler = require("./utils/globalErrorHandler.js");
 
 // ─── Route imports ──────────────────────────────────────────────────────────
 const authRoutes = require("./routes/authRoutes");
-const profileRoutes = require("./routes/profileRoutes");
+const profileRoutes = require("./routes/Profileroutes");
 const orderRoutes = require("./routes/orderRoutes.js");
-const reviewRoutes = require("./routes/reviewRoutes.js");
-const serviceRoutes = require("./routes/serviceRoutes.js");
-const addressRoutes = require("./routes/addressRoutes.js");
-const regionRoutes = require("./routes/regionRoutes.js");
-const deliveryRoutes = require("./routes/deliveryRoutes.js");
-const adminRoutes = require("./routes/adminRoutes.js");
+const reviewRoutes = require("./routes/USER/reviewRoutes.js");
+const serviceRoutes = require("./routes/USER/serviceRoutes.js");
+const addressRoutes = require("./routes/USER/addressRoutes.js");
+const regionRoutes = require("./routes/USER/regionRoutes.js");
+const deliveryRoutes = require("./routes/USER/deliveryRoutes.js");
+const adminRoutes = require("./routes/USER/adminRoutes.js");
+const shopRoutes = require("./routes/USER/shopRoutes.js");
+const userRoutes = require("./routes/USER/userRoutes.js");
 
 const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
@@ -512,6 +514,8 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/addresses", addressRoutes);
 app.use("/api/regions", regionRoutes);
 app.use("/api/delivery", deliveryRoutes);
+app.use("/api/shops", shopRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use("/api/admin/dashboard", adminDashboardRoutes);

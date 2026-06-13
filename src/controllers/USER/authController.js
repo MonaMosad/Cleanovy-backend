@@ -1,14 +1,14 @@
 // controllers/authController.js
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
-import LaundryShop from "../models/laundryShopModel.js";
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../../models/userModel.js");
+const LaundryShop = require("../../models/laundryShopModel.js");
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET || "secret", { expiresIn: "30d" });
 
 // POST /api/auth/register
-export const register = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { name, username, email, password, phone, national_id, role } = req.body;
 
@@ -36,7 +36,7 @@ export const register = async (req, res) => {
 };
 
 // POST /api/auth/login
-export const login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
@@ -58,7 +58,7 @@ export const login = async (req, res) => {
 };
 
 // GET /api/auth/me
-export const me = async (req, res) => {
+const me = async (req, res) => {
   try {
     const user = req.user;
     let shop = null;
@@ -70,3 +70,5 @@ export const me = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { register, login, me };

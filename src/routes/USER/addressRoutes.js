@@ -1,11 +1,11 @@
 // routes/addressRoutes.js
-import { Router } from "express";
-import { getMyAddresses, createAddress, deleteAddress } from "../controllers/addressController.js";
-import { protect } from "../middleware/auth.js";
+const { Router } = require("express");
+const { getMyAddresses, createAddress, deleteAddress } = require("../../controllers/USER/addressController.js");
+const { protect } = require("../../middleware/authMiddleware.js");
 
 const router = Router();
 router.use(protect);
 router.get("/",       getMyAddresses);
 router.post("/",      createAddress);
 router.delete("/:id", deleteAddress);
-export default router;
+module.exports = router;

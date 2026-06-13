@@ -1,9 +1,9 @@
 // controllers/orderController.js
-import mongoose from "mongoose";
-import Order from "../models/orderModel.js";
-import OrderItem from "../models/orderItemModel.js";
-import ProviderService from "../models/providerServiceModel.js";
-import LaundryShop from "../models/laundryShopModel.js";
+const mongoose = require("mongoose");
+const Order = require("../../models/orderModel.js");
+const OrderItem = require("../../models/orderItemModel.js");
+const ProviderService = require("../../models/providerServiceModel.js");
+const LaundryShop = require("../../models/laundryShopModel.js");
 
 const ORDER_STATUSES = [
   "pending", "accepted", "picked_up", "in_progress",
@@ -11,7 +11,7 @@ const ORDER_STATUSES = [
 ];
 
 // ─── POST /api/orders  (Client places an order) ──────────────────────────────
-export const createOrder = async (req, res) => {
+const createOrder = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -89,7 +89,7 @@ export const createOrder = async (req, res) => {
 };
 
 // ─── GET /api/orders  (Client: own orders | Provider: shop orders) ───────────
-export const getOrders = async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
 
@@ -121,7 +121,7 @@ export const getOrders = async (req, res) => {
 };
 
 // ─── GET /api/orders/:id  (Order detail with items) ──────────────────────────
-export const getOrderById = async (req, res) => {
+const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id)
       .populate("provider", "name address lat lng")
@@ -151,7 +151,7 @@ export const getOrderById = async (req, res) => {
 };
 
 // ─── PATCH /api/orders/:id/status  (Provider/Admin updates status) ────────────
-export const updateOrderStatus = async (req, res) => {
+const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
     if (!ORDER_STATUSES.includes(status))
@@ -184,7 +184,7 @@ export const updateOrderStatus = async (req, res) => {
 };
 
 // ─── GET /api/orders/:id/items ────────────────────────────────────────────────
-export const getOrderItems = async (req, res) => {
+const getOrderItems = async (req, res) => {
   try {
     const items = await OrderItem.find({ order: req.params.id }).populate({
       path: "service",
@@ -195,3 +195,5 @@ export const getOrderItems = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { createOrder, getOrders, getOrderById, updateOrderStatus, getOrderItems };

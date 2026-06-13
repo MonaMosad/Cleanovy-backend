@@ -1,14 +1,14 @@
 // controllers/userController.js
-import bcrypt from "bcryptjs";
-import User from "../models/userModel.js";
+const bcrypt = require("bcryptjs");
+const User = require("../../models/userModel.js");
 
 // GET /api/users/profile
-export const getProfile = async (req, res) => {
+const getProfile = async (req, res) => {
   res.json(req.user);
 };
 
 // PUT /api/users/profile
-export const updateProfile = async (req, res) => {
+const updateProfile = async (req, res) => {
   try {
     const { name, username, phone, national_id, password } = req.body;
     const user = req.user;
@@ -25,3 +25,5 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getProfile, updateProfile };

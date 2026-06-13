@@ -1,9 +1,10 @@
 // controllers/reviewController.js
-import Review from "../models/reviewModel.js";
-import Order from "../models/orderModel.js";
+// const Review = require("../../models/reviewModel.js");
+const Review = require("../../models/reviewModel.js");
+const Order = require("../../models/orderModel.js");
 
 // POST /api/reviews  (Client reviews a completed order)
-export const createReview = async (req, res) => {
+const createReview = async (req, res) => {
   try {
     const { order: orderId, rating, comment } = req.body;
     if (!orderId || !rating)
@@ -36,7 +37,7 @@ export const createReview = async (req, res) => {
 };
 
 // GET /api/reviews/shop/:shopId
-export const getShopReviews = async (req, res) => {
+const getShopReviews = async (req, res) => {
   try {
     const { 
       page = 1, 
@@ -70,7 +71,7 @@ export const getShopReviews = async (req, res) => {
 };
 
 // DELETE /api/reviews/:id  (Admin only)
-export const deleteReview = async (req, res) => {
+const deleteReview = async (req, res) => {
   try {
     await Review.findByIdAndDelete(req.params.id);
     res.json({ message: "Review deleted" });
@@ -78,3 +79,5 @@ export const deleteReview = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { createReview, getShopReviews, deleteReview };

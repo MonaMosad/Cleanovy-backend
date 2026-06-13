@@ -1,7 +1,7 @@
 // controllers/addressController.js
-import Address from "../models/addressModel.js";
+const Address = require("../../models/addressModel.js");
 
-export const getMyAddresses = async (req, res) => {
+const getMyAddresses = async (req, res) => {
   try {
     res.json(await Address.find({ user: req.user._id }).populate("region", "name"));
   } catch (err) {
@@ -9,7 +9,7 @@ export const getMyAddresses = async (req, res) => {
   }
 };
 
-export const createAddress = async (req, res) => {
+const createAddress = async (req, res) => {
   try {
     const { region, address } = req.body;
     if (!address) return res.status(400).json({ message: "address required" });
@@ -20,7 +20,7 @@ export const createAddress = async (req, res) => {
   }
 };
 
-export const deleteAddress = async (req, res) => {
+const deleteAddress = async (req, res) => {
   try {
     const doc = await Address.findOneAndDelete({ _id: req.params.id, user: req.user._id });
     if (!doc) return res.status(404).json({ message: "Address not found" });
@@ -29,3 +29,5 @@ export const deleteAddress = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getMyAddresses, createAddress, deleteAddress };

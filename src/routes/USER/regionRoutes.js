@@ -1,11 +1,11 @@
 
 // routes/regionRoutes.js
 
-import { Router } from "express";
+const { Router } = require("express");
 
-import { getRegions, createRegion, deleteRegion ,  getRegionById} from "../controllers/regionController.js";
+const { getRegions, createRegion, deleteRegion ,  getRegionById} = require("../../controllers/USER/regionController.js");
 
-import { protect, requireRole } from "../middleware/auth.js";
+const { protect, restrictTo } = require("../../middleware/authMiddleware.js");
 
 
 
@@ -13,11 +13,11 @@ const router = Router();
 
 router.get("/",       getRegions);
 
-router.post("/",      protect, requireRole("admin"), createRegion);
+router.post("/",      protect, restrictTo("admin"), createRegion);
 
-router.delete("/:id", protect, requireRole("admin"), deleteRegion);
+router.delete("/:id", protect, restrictTo("admin"), deleteRegion);
 
 router.get("/:id",    getRegionById);
 
-export default router; 
+module.exports = router; 
 

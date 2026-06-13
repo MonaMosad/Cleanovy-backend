@@ -1,8 +1,8 @@
 // controllers/regionController.js
-import Region from "../models/regionModel.js";
+const Region = require("../../models/regionModel.js");
 
 // 1. جلب كل المناطق مرتبة بالاسم
-export const getRegions = async (_req, res) => {
+const getRegions = async (_req, res) => {
   try {
     res.json(await Region.find().sort("name"));
   } catch (err) {
@@ -11,7 +11,7 @@ export const getRegions = async (_req, res) => {
 };
 
 // 2. جلب منطقة واحدة بالـ ID (الدالة دي اللي كانت ناقصة ومسببة المشكلة ✅)
-export const getRegionById = async (req, res) => {
+const getRegionById = async (req, res) => {
   try {
     const { id } = req.params;
     const region = await Region.findById(id);
@@ -27,7 +27,7 @@ export const getRegionById = async (req, res) => {
 };
 
 // 3. إنشاء منطقة جديدة
-export const createRegion = async (req, res) => {
+const createRegion = async (req, res) => {
   try {
     const { name } = req.body;
     if (!name) return res.status(400).json({ message: "name required" });
@@ -38,7 +38,7 @@ export const createRegion = async (req, res) => {
 };
 
 // 4. حذف منطقة
-export const deleteRegion = async (req, res) => {
+const deleteRegion = async (req, res) => {
   try {
     await Region.findByIdAndDelete(req.params.id);
     res.json({ message: "Region deleted" });
@@ -46,3 +46,5 @@ export const deleteRegion = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getRegions, getRegionById, createRegion, deleteRegion };

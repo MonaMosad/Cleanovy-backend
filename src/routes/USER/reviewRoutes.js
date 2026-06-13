@@ -1,10 +1,10 @@
 // routes/reviewRoutes.js
-import { Router } from "express";
-import { createReview, getShopReviews, deleteReview } from "../controllers/reviewController.js";
-import { protect, requireRole } from "../middleware/auth.js";
+const { Router } = require("express");
+const { createReview, getShopReviews, deleteReview } = require("../../controllers/USER/reviewController.js");
+const { protect, restrictTo } = require("../../middleware/authMiddleware.js");
 
 const router = Router();
 router.get("/shop/:shopId",  getShopReviews);
-router.post("/",             protect, requireRole("client"), createReview);
-router.delete("/:id",        protect, requireRole("admin"),  deleteReview);
-export default router;
+router.post("/",             protect, restrictTo("client"), createReview);
+router.delete("/:id",        protect, restrictTo("admin"),  deleteReview);
+module.exports = router;

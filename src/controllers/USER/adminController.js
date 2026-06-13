@@ -1,10 +1,10 @@
 // controllers/adminController.js
-import User from "../models/userModel.js";
-import LaundryShop from "../models/laundryShopModel.js";
-import Order from "../models/orderModel.js";
+const User = require("../../models/userModel.js");
+const LaundryShop = require("../../models/laundryShopModel.js");
+const Order = require("../../models/orderModel.js");
 
 // GET /api/admin/users
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const { role, page = 1, limit = 20 } = req.query;
     const filter = role ? { role } : {};
@@ -19,7 +19,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 // GET /api/admin/shops  (includes unverified)
-export const getAllShops = async (req, res) => {
+const getAllShops = async (req, res) => {
   try {
     const { verified, page = 1, limit = 20 } = req.query;
     const filter = verified !== undefined ? { is_verified: verified === "true" } : {};
@@ -34,7 +34,7 @@ export const getAllShops = async (req, res) => {
 };
 
 // PATCH /api/admin/shops/:id/verify
-export const verifyShop = async (req, res) => {
+const verifyShop = async (req, res) => {
   try {
     const shop = await LaundryShop.findByIdAndUpdate(
       req.params.id,
@@ -49,7 +49,7 @@ export const verifyShop = async (req, res) => {
 };
 
 // GET /api/admin/stats
-export const getPlatformStats = async (req, res) => {
+const getPlatformStats = async (req, res) => {
   try {
     const [totalUsers, totalShops, verifiedShops, totalOrders, revenueResult] = await Promise.all([
       User.countDocuments(),
@@ -72,3 +72,5 @@ export const getPlatformStats = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getAllUsers, getAllShops, verifyShop, getPlatformStats };

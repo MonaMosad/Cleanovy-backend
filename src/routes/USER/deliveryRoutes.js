@@ -1,11 +1,11 @@
 // routes/deliveryRoutes.js
-import { Router } from "express";
-import { getDeliveries, createDelivery, updateDeliveryStatus } from "../controllers/deliveryController.js";
-import { protect, requireRole } from "../middleware/auth.js";
+const { Router } = require("express");
+const { getDeliveries, createDelivery, updateDeliveryStatus } = require("../../controllers/USER/deliveryController.js");
+const { protect, restrictTo } = require("../../middleware/authMiddleware.js");
 
 const router = Router();
 router.use(protect);
-router.get("/",              requireRole("provider"), getDeliveries);
-router.post("/",             requireRole("provider"), createDelivery);
-router.patch("/:id/status",  requireRole("provider", "admin"), updateDeliveryStatus);
-export default router;
+router.get("/",              restrictTo("provider"), getDeliveries);
+router.post("/",             restrictTo("provider"), createDelivery);
+router.patch("/:id/status",  restrictTo("provider", "admin"), updateDeliveryStatus);
+module.exports = router;

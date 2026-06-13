@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import LaundryShop from "../models/laundryShopModel.js";
-import ProviderService from "../models/providerServiceModel.js";
-import Review from "../models/reviewModel.js";
-import Order from "../models/orderModel.js";
+const mongoose = require("mongoose");
+const LaundryShop = require("../../models/laundryShopModel.js");
+const ProviderService = require("../../models/providerServiceModel.js");
+const Review = require("../../models/reviewModel.js");
+const Order = require("../../models/orderModel.js");
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -28,7 +28,7 @@ const priceTier = (avg) => {
 };
 
 // ─── GET /api/shops  (Explore page) ─────────────────────────────────────────
-export const getShops = async (req, res) => {
+const getShops = async (req, res) => {
   try {
     let {
       lat,
@@ -200,7 +200,7 @@ export const getShops = async (req, res) => {
 };
 
 // ─── GET /api/shops/:id  (Shop detail) ──────────────────────────────────────
-export const getShopById = async (req, res) => {
+const getShopById = async (req, res) => {
   try {
     const { id } = req.params;
     const { lat, lng } = req.query;
@@ -255,7 +255,7 @@ export const getShopById = async (req, res) => {
 };
 
 // ─── POST /api/shops  (Provider creates shop) ───────────────────────────────
-export const createShop = async (req, res) => {
+const createShop = async (req, res) => {
   try {
     const { name, description, address, lat, lng } = req.body;
 
@@ -274,7 +274,7 @@ export const createShop = async (req, res) => {
 };
 
 // ─── PUT /api/shops/:id  (Provider updates own shop) ────────────────────────
-export const updateShop = async (req, res) => {
+const updateShop = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
     if (!shop) return res.status(404).json({ message: "Shop not found or not yours" });
@@ -290,7 +290,7 @@ export const updateShop = async (req, res) => {
 };
 
 // ─── GET /api/shops/:id/services  (Services of a shop) ──────────────────────
-export const getShopServices = async (req, res) => {
+const getShopServices = async (req, res) => {
   try {
     const services = await ProviderService.find({
       provider: req.params.id,
@@ -304,7 +304,7 @@ export const getShopServices = async (req, res) => {
 };
 
 // ─── POST /api/shops/:id/services  (Provider adds service) ──────────────────
-export const addShopService = async (req, res) => {
+const addShopService = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
     if (!shop) return res.status(404).json({ message: "Shop not found or not yours" });
@@ -325,7 +325,7 @@ export const addShopService = async (req, res) => {
 };
 
 // ─── DELETE /api/shops/:id/services/:psId  (Provider removes service) ───────
-export const removeShopService = async (req, res) => {
+const removeShopService = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
     if (!shop) return res.status(404).json({ message: "Shop not found or not yours" });
@@ -338,7 +338,7 @@ export const removeShopService = async (req, res) => {
 };
 
 // ─── GET /api/shops/:id/reviews ──────────────────────────────────────────────
-export const getShopReviews = async (req, res) => {
+const getShopReviews = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const reviews = await Review.find({ provider: req.params.id })
@@ -355,7 +355,7 @@ export const getShopReviews = async (req, res) => {
 };
 
 // ─── GET /api/shops/my  (Provider: get own shop) ─────────────────────────────
-export const getMyShop = async (req, res) => {
+const getMyShop = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ user: req.user._id });
     if (!shop) return res.status(404).json({ message: "No shop found for this provider" });
@@ -366,7 +366,7 @@ export const getMyShop = async (req, res) => {
 };
 
 // ─── GET /api/shops/:id/dashboard  (Provider analytics) ─────────────────────
-export const getShopDashboard = async (req, res) => {
+const getShopDashboard = async (req, res) => {
   try {
     const shopId = req.params.id;
     const shop = await LaundryShop.findOne({ _id: shopId, user: req.user._id });
@@ -398,3 +398,5 @@ export const getShopDashboard = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getShops, getShopById, createShop, updateShop, getShopServices, addShopService, removeShopService, getShopReviews, getMyShop, getShopDashboard };

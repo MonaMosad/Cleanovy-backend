@@ -1,12 +1,12 @@
 // routes/adminRoutes.js
-import { Router } from "express";
-import { getAllUsers, getAllShops, verifyShop, getPlatformStats } from "../controllers/adminController.js";
-import { protect, requireRole } from "../middleware/auth.js";
+const { Router } = require("express");
+const { getAllUsers, getAllShops, verifyShop, getPlatformStats } = require("../../controllers/USER/adminController.js");
+const { protect, restrictTo } = require("../../middleware/authMiddleware.js");
 
 const router = Router();
-router.use(protect, requireRole("admin"));
+router.use(protect, restrictTo("admin"));
 router.get("/users",           getAllUsers);
 router.get("/shops",           getAllShops);
 router.patch("/shops/:id/verify", verifyShop);
 router.get("/stats",           getPlatformStats);
-export default router;
+module.exports = router;

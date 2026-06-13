@@ -1,9 +1,9 @@
 // controllers/deliveryController.js
-import Delivery from "../models/deliveryModel.js";
-import LaundryShop from "../models/laundryShopModel.js";
+const Delivery = require("../../models/deliveryModel.js");
+const LaundryShop = require("../../models/laundryShopModel.js");
 
 // GET /api/delivery  – provider sees their delivery agents
-export const getDeliveries = async (req, res) => {
+const getDeliveries = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ user: req.user._id });
     if (!shop) return res.status(404).json({ message: "Shop not found" });
@@ -14,7 +14,7 @@ export const getDeliveries = async (req, res) => {
 };
 
 // POST /api/delivery  – provider adds a delivery agent
-export const createDelivery = async (req, res) => {
+const createDelivery = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ user: req.user._id });
     if (!shop) return res.status(404).json({ message: "Shop not found" });
@@ -30,7 +30,7 @@ export const createDelivery = async (req, res) => {
 };
 
 // PATCH /api/delivery/:id/status
-export const updateDeliveryStatus = async (req, res) => {
+const updateDeliveryStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const delivery = await Delivery.findByIdAndUpdate(
@@ -44,3 +44,5 @@ export const updateDeliveryStatus = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+module.exports = { getDeliveries, createDelivery, updateDeliveryStatus };
