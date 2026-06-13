@@ -201,6 +201,7 @@ const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
 const adminReviewsRoutes = require("./routes/admin/reviews.routes");
 const adminUsersRoutes = require("./routes/admin/users.routes");
+const reviewRoutes = require("./routes/reviewRoutes");
 const app = express();
 
 // ─── Ensure uploads directory exists ─────────────────────────────────────────
@@ -271,7 +272,8 @@ const API_PREFIX = `/api/${process.env.API_VERSION}`;
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", orderRoutes); 
 
-
+//userreviews
+app.use("/api/reviews", reviewRoutes);
 //dashbourd
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 // user (admin)
