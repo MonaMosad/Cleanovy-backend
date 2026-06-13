@@ -517,16 +517,14 @@ app.use("/api/regions", regionRoutes);
 app.use("/api/delivery", deliveryRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/admin", adminRoutes);
-
+// ─── Admin Panel routes (no auth) — must be registered BEFORE /api/admin ─────
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.use("/api/admin/users", adminUsersRoutes);
-//admin landrais
 app.use("/api/admin/laundries", adminLaundriesRoutes);
-//oreders (admin)
 app.use("/api/admin/orders", adminOrdersRoutes);
-// reviews (admin)
 app.use("/api/admin/reviews", adminReviewsRoutes);
+// ─── Old admin route (has protect + restrictTo middleware) ────────────────────
+app.use("/api/admin", adminRoutes);
 // مسارات المشروع الأساسية
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);

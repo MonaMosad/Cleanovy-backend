@@ -66,7 +66,7 @@ exports.getFinancial = async (req, res, next) => {
 exports.getRecentOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
-      .populate("client", "name")
+      .populate("client", "fullName")
       .populate("provider", "name")
       .sort({ createdAt: -1 })
       .limit(5)
@@ -76,7 +76,7 @@ exports.getRecentOrders = async (req, res, next) => {
     // نعمل تنسيق لرقم الطلب
     const recentOrders = orders.map((order) => ({
       orderNumber: `ORD-${order._id.toString().slice(-6)}#`,
-      client: order.client?.name || "غير معروف",
+      client: order.client?.fullName || "غير معروف",
       provider: order.provider?.name || "غير معروف",
       amount: order.total_price,
       status: order.status,
