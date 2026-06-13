@@ -1,4 +1,3 @@
-// models/review.model.js
 const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema(
@@ -8,40 +7,29 @@ const reviewSchema = new mongoose.Schema(
       ref: "LaundryShop",
       required: true,
     },
-
-    // ✅ KEPT: tying review to an order ensures one review per order (see index below)
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
       required: true,
+      unique: true, // كل أوردر ماله غير ريفيو واحد
     },
-
     client: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-
-    rating: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 5,
-    },
-
-    comment: { type: String, trim: true },
-
-    // ✅ ADDED: provider reply to the review (used in Dev 5 — Provider Reviews Management)
-    provider_reply: {
-      type: String,
-      trim: true,
-      default: null,
-    },
-
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, trim: true, default: null },
+    provider_reply: { type: String, trim: true, default: null },
     provider_replied_at: { type: Date, default: null },
+
+    // ✅ ADDED: الأدمن يقدر يخفي ريفيو مسيء
+    is_hidden: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-const Review = mongoose.model("Review", reviewSchema);
-module.exports = Review;
+reviewSchema.index({ provider: 1, createdAt: -1 });
+reviewSchema.index({ client: 1 });
+
+module.exports = mongoose.model("Review", reviewSchema);
