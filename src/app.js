@@ -418,7 +418,8 @@ const fs = require("fs");
 const logger = require("./config/logger");
 const passport = require("./config/passport");
 const connectDB = require('./config/db');
-
+const adminLaundriesRoutes = require("./routes/admin/laundries.routes");
+const adminOrdersRoutes = require("./routes/admin/orders.routes");
 const { errorHandler, notFound } = require("./middleware/errorMiddleware");
 const { apiLimiter } = require("./middleware/rateLimitMiddleware");
 const globalErrorHandler = require("./utils/globalErrorHandler.js");
@@ -520,7 +521,11 @@ app.use("/api/admin", adminRoutes);
 
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.use("/api/admin/users", adminUsersRoutes);
-
+//admin landrais
+app.use("/api/admin/laundries", adminLaundriesRoutes);
+//oreders (admin)
+app.use("/api/admin/orders", adminOrdersRoutes);
+// مسارات المشروع الأساسية
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);
 
