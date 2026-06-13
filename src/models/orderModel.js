@@ -414,9 +414,12 @@ const orderSchema = new mongoose.Schema(
 
     // ── Address & Fulfillment ─────────────────────────────────
     address: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Address",
-      required: true,
+      type: String,
+      
+      required: function () {
+        // الحقل ده هيكون إجباري فقط لو نوع التوصيل delivery
+        return this.delivery_type === 'delivery';
+      }
     },
 
     delivery_type: {
@@ -453,8 +456,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     coupon: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Coupon",
+      type: String,
       default: null,
     },
 

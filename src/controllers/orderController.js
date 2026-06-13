@@ -749,7 +749,7 @@ const placeOrder = catchAsync(async (req, res, next) => {
     notes,
     coupon_code,
     payment_method,
-    delivery_type,
+    delivery_type="delivery",
     delivery_address,
   } = req.body;
 
@@ -761,10 +761,14 @@ const placeOrder = catchAsync(async (req, res, next) => {
   if (!["pickup", "delivery"].includes(delivery_type))
     return next(new AppError("نوع التسليم غير صحيح — pickup أو delivery", 400));
 
-  if (delivery_type === "delivery" && !delivery_address?.trim())
-    return next(new AppError("عنوان التوصيل مطلوب", 400));
+  // if (delivery_type === "delivery" && !delivery_address?.trim())
+  //   return next(new AppError("عنوان التوصيل مطلوب", 400));
 
   // ── Validate IDs ──────────────────────────────────────────
+  if(delivery_type==="delivery") {
+    if (!delivery_address?.trim())
+      return next(new AppError("عنوان التوصيل مطلوب للتوصيل", 400));
+  } 
   if (!mongoose.Types.ObjectId.isValid(provider))
     return next(new AppError("provider_id غير صالح", 400));
 
