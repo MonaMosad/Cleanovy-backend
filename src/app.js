@@ -439,9 +439,9 @@ const userRoutes = require("./routes/USER/userRoutes.js");
 
 const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
+const adminReviewsRoutes = require("./routes/admin/reviews.routes");
 const adminDashboardRoutes = require("./routes/admin/dashboard.routes");
 const adminUsersRoutes = require("./routes/admin/users.routes");
-
 const app = express();
 
 // ─── Ensure uploads directory exists ─────────────────────────────────────────
@@ -517,14 +517,14 @@ app.use("/api/regions", regionRoutes);
 app.use("/api/delivery", deliveryRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/admin", adminRoutes);
-
+// ─── Admin Panel routes (no auth) — must be registered BEFORE /api/admin ─────
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.use("/api/admin/users", adminUsersRoutes);
-//admin landrais
 app.use("/api/admin/laundries", adminLaundriesRoutes);
-//oreders (admin)
 app.use("/api/admin/orders", adminOrdersRoutes);
+app.use("/api/admin/reviews", adminReviewsRoutes);
+// ─── Old admin route (has protect + restrictTo middleware) ────────────────────
+app.use("/api/admin", adminRoutes);
 // مسارات المشروع الأساسية
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);

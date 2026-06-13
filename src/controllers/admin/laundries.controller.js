@@ -59,9 +59,11 @@ exports.getLaundries = async (req, res, next) => {
     // نجمّع الخدمات على الـ provider id بتاعها
     const servicesMap = {};
     services.forEach((s) => {
+      const name = s.service?.name;
+      if (!name) return;
       const pid = s.provider.toString();
       if (!servicesMap[pid]) servicesMap[pid] = [];
-      servicesMap[pid].push(s.service?.name);
+      servicesMap[pid].push(name);
     });
 
     res.json({
