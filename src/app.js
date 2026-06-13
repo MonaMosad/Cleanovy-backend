@@ -199,7 +199,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const orderRoutes = require("./routes/orderRoutes.js");
 const dashboardRoutes = require('./routes/provider/dashboardRoutes');
 const ordersRoutes = require('./routes/provider/ordersRoutes');
-
+const adminReviewsRoutes = require("./routes/admin/reviews.routes");
 const adminUsersRoutes = require("./routes/admin/users.routes");
 const app = express();
 
@@ -281,6 +281,8 @@ app.use("/api/admin/users", adminUsersRoutes);
 app.use("/api/admin/laundries", adminLaundriesRoutes);
 //oreders (admin)
 app.use("/api/admin/orders", adminOrdersRoutes);
+// reviews (admin)
+app.use("/api/admin/reviews", adminReviewsRoutes);
 // مسارات المشروع الأساسية
 app.use(`${API_PREFIX}/auth`, authRoutes);
 app.use(`${API_PREFIX}/profile`, profileRoutes);
