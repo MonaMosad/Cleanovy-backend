@@ -74,3 +74,91 @@ SIGINT received. Shutting down gracefully...
 [2026-06-14 12:18:16] INFO: ::1 - - [14/Jun/2026:09:18:16 +0000] "POST /api/v1/auth/laundry-shop HTTP/1.1" 500 1094 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
 [2026-06-14 12:32:31] INFO: 
 SIGINT received. Shutting down gracefully...
+[2026-06-14 18:48:35] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 18:51:31] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 18:51:35] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 18:51:48] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-14 18:51:51] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 18:57:01] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 18:57:08] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-14 18:57:17] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 19:03:18] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-14 19:03:28] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 19:08:34] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-14 19:18:56] INFO: ::1 - - [14/Jun/2026:16:18:56 +0000] "POST /api/v1/auth/register HTTP/1.1" 409 89 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-14 19:20:50] INFO: ✅ SMTP connection verified
+[2026-06-14 19:20:51] INFO: 📧 Email sent to fatmaemad4159@gmail.com — ID: <ce3149cc-4301-7942-43d3-ab06668a2481@gmail.com>
+[2026-06-14 19:20:51] INFO: ::1 - - [14/Jun/2026:16:20:51 +0000] "POST /api/v1/auth/register HTTP/1.1" 201 1035 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-14 19:20:52] INFO: ::1 - - [14/Jun/2026:16:20:52 +0000] "POST /api/v1/auth/laundry-shop HTTP/1.1" 201 792 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-14 19:21:36] INFO: ::1 - - [14/Jun/2026:16:21:36 +0000] "GET /api/v1/auth/verify-email/96f87531f0e946d9de11c0392f6c60cd7c7d85d2af87dc1200f9532af4da782a HTTP/1.1" 400 100 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:21:37] INFO: ::1 - - [14/Jun/2026:16:21:37 +0000] "GET /favicon.ico HTTP/1.1" 404 78 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:21:42] INFO: ::1 - - [14/Jun/2026:16:21:42 +0000] "GET /api/v1/auth/verify-email/96f87531f0e946d9de11c0392f6c60cd7c7d85d2af87dc1200f9532af4da782a HTTP/1.1" 400 100 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:23:05] INFO: ✅ SMTP connection verified
+[2026-06-14 19:23:06] INFO: 📧 Email sent to fatmaemad4159@gmail.com — ID: <d63a39c4-e91e-0096-5ca5-9dc46a052990@gmail.com>
+[2026-06-14 19:23:06] INFO: ::1 - - [14/Jun/2026:16:23:06 +0000] "POST /api/v1/auth/register HTTP/1.1" 201 1035 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-14 19:23:07] INFO: ::1 - - [14/Jun/2026:16:23:07 +0000] "POST /api/v1/auth/laundry-shop HTTP/1.1" 201 761 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-14 19:23:28] INFO: ::1 - - [14/Jun/2026:16:23:28 +0000] "GET /api/v1/auth/verify-email/d73cb3e61a75d1723e8caf77fff2f9bfc9718b726f81b14f5f061e9ce1cb5d94 HTTP/1.1" 400 100 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:23:43] INFO: ::1 - - [14/Jun/2026:16:23:43 +0000] "GET /api/v1/auth/verify-email/d73cb3e61a75d1723e8caf77fff2f9bfc9718b726f81b14f5f061e9ce1cb5d94 HTTP/1.1" 400 100 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:23:52] INFO: ::1 - - [14/Jun/2026:16:23:52 +0000] "GET /api/v1/auth/verify-email/9d644777403be554a089eb912c5feb7f5984004f6522e29d63a561ca3360e84e HTTP/1.1" 200 3289 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:25:00] INFO: ::1 - - [14/Jun/2026:16:25:00 +0000] "POST /api/v1/auth/login HTTP/1.1" 200 927 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36"
+[2026-06-14 19:31:01] INFO: 
+SIGINT received. Shutting down gracefully...

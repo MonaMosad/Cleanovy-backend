@@ -66,3 +66,6 @@ router.post("/special-entities/save-all", discountsController.saveAllSpecialEnti
 router.get("/simulate", discountsController.simulateDiscount);
 
 module.exports = router;
+
+
+
