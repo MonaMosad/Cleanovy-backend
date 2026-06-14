@@ -1,0 +1,12 @@
+[2026-06-14 12:18:16] ERROR: Create laundry shop error: LaundryShop.findOne is not a function
+[2026-06-14 12:18:16] ERROR: TypeError: LaundryShop.findOne is not a function
+    at exports.createLaundryShop (D:\Cleanovy-backend\src\controllers\authController.js:479:40)
+    at Layer.handle [as handle_request] (D:\Cleanovy-backend\node_modules\express\lib\router\layer.js:95:5)
+    at next (D:\Cleanovy-backend\node_modules\express\lib\router\route.js:149:13)
+    at Route.dispatch (D:\Cleanovy-backend\node_modules\express\lib\router\route.js:119:3)
+    at Layer.handle [as handle_request] (D:\Cleanovy-backend\node_modules\express\lib\router\layer.js:95:5)
+    at D:\Cleanovy-backend\node_modules\express\lib\router\index.js:284:15
+    at router.process_params (D:\Cleanovy-backend\node_modules\express\lib\router\index.js:346:12)
+    at next (D:\Cleanovy-backend\node_modules\express\lib\router\index.js:280:10)
+    at exports.protect (D:\Cleanovy-backend\src\middleware\authMiddleware.js:44:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
