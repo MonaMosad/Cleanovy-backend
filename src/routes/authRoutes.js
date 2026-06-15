@@ -62,7 +62,7 @@ router.get(
   facebookCallback
 );
 // ─── Protected Routes  
-router.use(protect); // All routes below require login
+// router.use(protect); // All routes below require login
 
 router.get("/me", getMe);
 router.post("/logout", logout);
