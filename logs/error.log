@@ -10,3 +10,8 @@
     at next (D:\Cleanovy-backend\node_modules\express\lib\router\index.js:280:10)
     at exports.protect (D:\Cleanovy-backend\src\middleware\authMiddleware.js:44:5)
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[2026-06-15 10:18:28] ERROR: Register error: next is not a function
+[2026-06-15 10:18:28] ERROR: TypeError: next is not a function
+    at model.<anonymous> (D:\Cleanovy-backend\src\models\userModel.js:110:44)
+    at Kareem.execPre (D:\Cleanovy-backend\node_modules\kareem\index.js:59:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)

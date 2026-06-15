@@ -225,3 +225,62 @@ SIGINT received. Shutting down gracefully...
       
 [2026-06-15 09:59:39] INFO: 
 SIGINT received. Shutting down gracefully...
+[2026-06-15 10:01:16] INFO: 
+         claenovy API SERVER
+   Status  : Running
+   Port    : 5000
+   Env     : development
+   Version : v1
+      
+[2026-06-15 10:15:41] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-15 10:15:49] INFO: 
+         claenovy API SERVER
+   Status  : Running
+   Port    : 5000
+   Env     : development
+   Version : v1
+      
+[2026-06-15 10:16:43] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-15 10:16:50] INFO: 
+         claenovy API SERVER
+   Status  : Running
+   Port    : 3000
+   Env     : development
+   Version : v1
+      
+[2026-06-15 10:18:27] INFO: ✅ SMTP connection verified
+[2026-06-15 10:18:28] INFO: 📧 Email sent to fatmaemad4159@gmail.com — ID: <0df2c6a8-9a2b-8e16-0ff4-6909f8e11183@gmail.com>
+[2026-06-15 10:18:28] ERROR: Register error: next is not a function
+[2026-06-15 10:18:28] ERROR: TypeError: next is not a function
+    at model.<anonymous> (D:\Cleanovy-backend\src\models\userModel.js:110:44)
+    at Kareem.execPre (D:\Cleanovy-backend\node_modules\kareem\index.js:59:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[2026-06-15 10:18:28] INFO: ::1 - - [15/Jun/2026:07:18:28 +0000] "POST /api/v1/auth/register HTTP/1.1" 500 348 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:21:15] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-15 10:23:55] INFO: 
+         claenovy API SERVER
+   Status  : Running
+   Port    : 3000
+   Env     : development
+   Version : v1
+      
+[2026-06-15 10:24:13] INFO: ::1 - - [15/Jun/2026:07:24:13 +0000] "GET /api/v1/profile/me HTTP/1.1" 401 64 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:24:14] INFO: ::1 - - [15/Jun/2026:07:24:14 +0000] "GET /api/v1/profile/me HTTP/1.1" 401 64 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:25:54] INFO: ::1 - - [15/Jun/2026:07:25:54 +0000] "POST /api/v1/auth/register HTTP/1.1" 409 89 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:26:09] INFO: ✅ SMTP connection verified
+[2026-06-15 10:26:10] INFO: 📧 Email sent to fatmaemad4159@gmail.com — ID: <d1d1f5ac-c643-74e1-27ee-8808f2a8631b@gmail.com>
+[2026-06-15 10:26:11] INFO: ::1 - - [15/Jun/2026:07:26:11 +0000] "POST /api/v1/auth/register HTTP/1.1" 201 1035 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:26:12] INFO: ::1 - - [15/Jun/2026:07:26:12 +0000] "POST /api/v1/auth/laundry-shop HTTP/1.1" 201 763 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:29:10] INFO: ✅ SMTP connection verified
+[2026-06-15 10:29:11] INFO: 📧 Email sent to fatmaemad4159@gmail.com — ID: <76c687eb-3208-b616-3bfa-c7b4c73397b2@gmail.com>
+[2026-06-15 10:29:11] INFO: ::1 - - [15/Jun/2026:07:29:11 +0000] "POST /api/v1/auth/register HTTP/1.1" 201 1035 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:29:12] INFO: ::1 - - [15/Jun/2026:07:29:12 +0000] "POST /api/v1/auth/laundry-shop HTTP/1.1" 201 763 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:31:03] INFO: ::1 - - [15/Jun/2026:07:31:03 +0000] "POST /api/v1/auth/login HTTP/1.1" 200 928 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:31:29] INFO: ::1 - - [15/Jun/2026:07:31:29 +0000] "POST /api/v1/auth/login HTTP/1.1" 401 73 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:31:34] INFO: ::1 - - [15/Jun/2026:07:31:34 +0000] "POST /api/v1/auth/login HTTP/1.1" 401 73 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:32:45] INFO: ::1 - - [15/Jun/2026:07:32:45 +0000] "POST /api/v1/auth/login HTTP/1.1" 200 928 "http://localhost:5173/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.124.2 Chrome/148.0.7778.97 Electron/42.2.0 Safari/537.36"
+[2026-06-15 10:33:29] INFO: 
+SIGINT received. Shutting down gracefully...
