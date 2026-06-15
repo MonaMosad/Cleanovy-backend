@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../../models/userModel");
 const LaundryShop = require("../../models/laundryShopModel");
 const Order = require("../../models/orderModel");
@@ -25,34 +26,45 @@ exports.getStats = async (req, res, next) => {
 };
 
 // ─── GET /api/admin/dashboard/financial ──────────────────────────────────────
+// ?period=all|monthly|yearly  &  ?provider=<id>|all
 exports.getFinancial = async (req, res, next) => {
   try {
+    const period   = req.query.period   || "all";
+    const provider = req.query.provider || "all";
+
+    const match = { status: "delivered" };
+
+    // فلتر الفترة الزمنية
+    if (period === "monthly") {
+      const now = new Date();
+      match.createdAt = { $gte: new Date(now.getFullYear(), now.getMonth(), 1) };
+    } else if (period === "yearly") {
+      match.createdAt = { $gte: new Date(new Date().getFullYear(), 0, 1) };
+    }
+
+    // فلتر المغسلة
+    if (provider !== "all" && mongoose.Types.ObjectId.isValid(provider)) {
+      match.provider = new mongoose.Types.ObjectId(provider);
+    }
+
     const result = await Order.aggregate([
-      { $match: { status: "delivered" } },
+      { $match: match },
       {
         $group: {
           _id: null,
           totalRevenue: { $sum: "$total_price" },
-          totalProviderEarnings: { $sum: "$provider_price" },
-          totalAdminCommission: { $sum: "$platform_commission" },
-          totalOrders: { $sum: 1 },
+          totalOrders:  { $sum: 1 },
         },
       },
     ]);
 
-    const financial = result.length > 0
-      ? {
-          totalRevenue: result[0].totalRevenue,
-          totalProviderEarnings: result[0].totalProviderEarnings,
-          totalAdminCommission: result[0].totalAdminCommission,
-          totalOrders: result[0].totalOrders,
-        }
-      : {
-          totalRevenue: 0,
-          totalProviderEarnings: 0,
-          totalAdminCommission: 0,
-          totalOrders: 0,
-        };
+    const totalRevenue = result[0]?.totalRevenue || 0;
+    const financial = {
+      totalRevenue,
+      totalProviderEarnings: Math.round(totalRevenue * 0.9 * 100) / 100,
+      totalAdminCommission:  Math.round(totalRevenue * 0.1 * 100) / 100,
+      totalOrders: result[0]?.totalOrders || 0,
+    };
 
     res.status(200).json({
       status: "success",
@@ -66,7 +78,7 @@ exports.getFinancial = async (req, res, next) => {
 exports.getRecentOrders = async (req, res, next) => {
   try {
     const orders = await Order.find()
-      .populate("client", "name")
+      .populate("client", "fullName")
       .populate("provider", "name")
       .sort({ createdAt: -1 })
       .limit(5)
@@ -76,7 +88,7 @@ exports.getRecentOrders = async (req, res, next) => {
     // نعمل تنسيق لرقم الطلب
     const recentOrders = orders.map((order) => ({
       orderNumber: `ORD-${order._id.toString().slice(-6)}#`,
-      client: order.client?.name || "غير معروف",
+      client: order.client?.fullName || "غير معروف",
       provider: order.provider?.name || "غير معروف",
       amount: order.total_price,
       status: order.status,
@@ -99,7 +111,7 @@ exports.getPendingLaundries = async (req, res, next) => {
     const laundries = await LaundryShop.find({ is_verified: false })
       .populate("user", "name email")
       .sort({ createdAt: -1 })
-      .limit(10)
+      .limit(5)
       .lean();
 
     // نجيب الخدمات لكل مغسلة

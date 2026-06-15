@@ -1,4 +1,4 @@
- const express = require("express");
+const express = require("express");
 const router = express.Router();
 const passport = require("../config/passport");
 
@@ -14,6 +14,7 @@ const {
   changePassword,
   googleCallback,
   facebookCallback,
+  createLaundryShop,
 } = require("../controllers/authController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -66,5 +67,8 @@ router.get(
 router.get("/me", getMe);
 router.post("/logout", logout);
 router.post("/change-password", validateChangePassword, changePassword);
+
+// ─── Laundry Shop (for laundry_owner role)
+router.post("/laundry-shop", createLaundryShop);
 
 module.exports = router;

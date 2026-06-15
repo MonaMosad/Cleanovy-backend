@@ -444,3 +444,60 @@ exports.facebookCallback = async (req, res, next) => {
     next(error);
   }
 };
+// ─── @route  POST /api/v1/auth/laundry-shop  
+// @desc    Create laundry shop for a laundry_owner after registration
+// @access  Protected (laundry_owner only)
+exports.createLaundryShop = async (req, res, next) => {
+  try {
+    const LaundryShop = require("../models/laundryShopModel");
+
+    // تأكد إن المستخدم صاحب مغسلة
+    if (req.user.role !== "laundry_owner") {
+      return res.status(403).json({
+        status: "fail",
+        message: "هذه الخدمة متاحة لأصحاب المغاسل فقط",
+      });
+    }
+
+    const { name, description, address } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({
+        status: "fail",
+        message: "اسم المغسلة مطلوب",
+      });
+    }
+
+    if (!address || !address.trim()) {
+      return res.status(400).json({
+        status: "fail",
+        message: "عنوان المغسلة مطلوب",
+      });
+    }
+
+    // تحقق لو المغسلة موجودة بالفعل لنفس المستخدم
+    const existing = await LaundryShop.findOne({ user: req.user._id });
+    if (existing) {
+      return res.status(409).json({
+        status: "fail",
+        message: "لديك مغسلة مسجلة بالفعل",
+      });
+    }
+
+    const shop = await LaundryShop.create({
+      user: req.user._id,
+      name: name.trim(),
+      description: description ? description.trim() : "",
+      address: address.trim(),
+    });
+
+    res.status(201).json({
+      status: "success",
+      message: "تم إنشاء المغسلة بنجاح",
+      data: { shop },
+    });
+  } catch (error) {
+    logger.error(`Create laundry shop error: ${error.message}`);
+    next(error);
+  }
+};

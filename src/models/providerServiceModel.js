@@ -1,3 +1,5 @@
+
+
 // models/providerService.model.js
   // import mongoose from "mongoose";
 // require("mongoose");
@@ -24,6 +26,10 @@ const providerServiceSchema = new mongoose.Schema(
       enum: ["per_piece", "per_kg", "per_set"],
       default: "per_piece",
     },
+
+    fast_service: { type: Boolean, default: false },
+
+    fast_multiplier: { type: Number, default: 1.5 }, // e.g. 1.5 = price × 1.5
 
     is_active: { type: Boolean, default: true },
   },
