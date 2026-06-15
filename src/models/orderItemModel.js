@@ -22,7 +22,7 @@ const orderItemSchema = new mongoose.Schema(
 
     total_price: { type: Number, required: true, min: 0 }, // quantity * unit_price
   },
-  { timestamps: true,collection: "orderItems" }
+  { timestamps: true }
 );
 
 // export default mongoose.model("OrderItem", orderItemSchema);

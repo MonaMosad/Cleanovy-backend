@@ -1,9 +1,16 @@
- const mongoose = require("mongoose");
+
+
+// models/user.model.js
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
-    // ─── Account Type
+    // ─── Identity ──────────────────────────────────────────────
+    username: { type: String, unique: true },
+
+    national_id: { type: String },
+
     role: {
       type: String,
       enum: ["client", "laundry_owner", "admin"],
@@ -11,7 +18,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    // ─── Basic Info
+    // ─── Basic Info ────────────────────────────────────────────
     fullName: {
       type: String,
       required: [true, "الاسم الكامل مطلوب"],
@@ -51,13 +58,14 @@ const userSchema = new mongoose.Schema(
 
     avatar: { type: String, default: null },
 
+    // ─── Address ───────────────────────────────────────────────
     address: {
       type: String,
       default: null,
       trim: true,
     },
 
-    // ─── Auth Methods
+    // ─── Auth Methods ──────────────────────────────────────────
     authProvider: {
       type: String,
       enum: ["local", "google", "facebook"],
@@ -66,22 +74,22 @@ const userSchema = new mongoose.Schema(
     googleId: { type: String, default: null },
     facebookId: { type: String, default: null },
 
-    // ─── Account Status
+    // ─── Account Status ────────────────────────────────────────
     isVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     isBanned: { type: Boolean, default: false },
 
-    // ─── Verification & Reset Tokens
+    // ─── Verification & Reset Tokens ───────────────────────────
     emailVerificationToken: { type: String, select: false },
     emailVerificationExpires: { type: Date, select: false },
 
     passwordResetToken: { type: String, select: false },
     passwordResetExpires: { type: Date, select: false },
 
-    // ─── Refresh Token
+    // ─── Refresh Token ──────────────────────────────────────────
     refreshToken: { type: String, select: false },
 
-    // ─── Timestamps
+    // ─── Timestamps ───────────────────────────────────────────
     lastLogin: { type: Date, default: null },
   },
   {
@@ -91,22 +99,25 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// ─── Indexes
+// ─── Indexes ─────────────────────────────────────────────────
+// email, phone, and username already have `unique: true`, which
+// creates indexes automatically. Only add explicit indexes for
+// fields that need one but aren't unique.
 userSchema.index({ role: 1 });
 
-// ─── Pre-save: Hash Password
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+// ─── Pre-save: Hash Password ───────────────────────────────────
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// ─── Method: Compare Password
+// ─── Method: Compare Password ──────────────────────────────────
 userSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// ─── Method: Safe output (no sensitive fields)
+// ─── Method: Safe output (no sensitive fields) ──────────────────
 userSchema.methods.toSafeObject = function () {
   const obj = this.toObject();
   delete obj.password;

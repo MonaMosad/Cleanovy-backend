@@ -1,26 +1,46 @@
 
 
-// في كل route file
-// router.use(authMiddleware);        // التحقق من التوكن
-// router.use(providerOnlyMiddleware); // التحقق إنه provider مش client
+
+// // routes/provider/ordersRoutes.js
+
+// // TODO: uncomment middleware once auth is active
+// // router.use(authMiddleware);
+// // router.use(providerOnlyMiddleware);
+
+// const express = require("express");
+// const router = express.Router();
+// const ordersController = require("../../controllers/provider/ordersController");
+
+// // ⚠ ORDER MATTERS — specific routes must come before /:id
+
+// router.get("/", ordersController.getOrders);
+// router.get("/report/today", ordersController.getTodayReport); // ← before /:id
+// router.get("/:id", ordersController.getOrderById);
+// router.post("/:orderId/accept", ordersController.acceptOrder);
+// router.post("/:orderId/reject", ordersController.rejectOrder);
+// router.patch("/:orderId/status", ordersController.updateOrderStatus);
+
+// module.exports = router;
 
 
-const express = require('express');
+
+
+
+
+const express = require("express");
 const router = express.Router();
-const ordersController = require('../../controllers/provider/ordersController');
+const { protect } = require("../../middleware/authMiddleware");
+const providerOnlyMiddleware = require("../../middleware/providerOnlyMiddleware");
+const ordersController = require("../../controllers/provider/ordersController");
 
-router.get('/', ordersController.getOrders);
-router.get('/:id', ordersController.getOrderById);
+router.use(protect);
+router.use(providerOnlyMiddleware);
+
+router.get("/", ordersController.getOrders);
+router.get("/report/today", ordersController.getTodayReport);
+router.get("/:id", ordersController.getOrderById);
 router.post("/:orderId/accept", ordersController.acceptOrder);
-router.post('/:orderId/reject', ordersController.rejectOrder);
-router.patch('/:orderId/status', ordersController.updateOrderStatus);
-router.get('/report/today', ordersController.getTodayReport);
-
-
-
-
-
+router.post("/:orderId/reject", ordersController.rejectOrder);
+router.patch("/:orderId/status", ordersController.updateOrderStatus);
 
 module.exports = router;
-
-
