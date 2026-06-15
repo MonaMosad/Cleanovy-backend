@@ -407,31 +407,61 @@ const Service = require("../../models/serviceModel");
 
 const getCategories = async (req, res) => {
   try {
-    const providerId = req.shop._id;
-    const categories = await Service.find({ parent: null, $or: [{ provider: null }, { provider: providerId }] }).select("name icon provider");
+    const providerId = req.user._id;
+    const categories = await Service.find({
+      parent: null,
+      $or: [{ provider: null }, { provider: providerId }],
+      is_active: true,
+    }).select("name icon provider");
+
+    const categoryIds = categories.map((c) => c._id);
+    const catalogChildren = await Service.find({
+      parent: { $in: categoryIds },
+      provider: null,
+      is_active: true,
+    }).select("name icon unit duration_hours parent");
+
+    const childrenByParent = {};
+    catalogChildren.forEach((child) => {
+      const pid = child.parent.toString();
+      if (!childrenByParent[pid]) childrenByParent[pid] = [];
+      childrenByParent[pid].push(child);
+    });
+
     const providerServices = await ProviderService.find({ provider: providerId }).populate("service", "parent");
     const countMap = {};
     providerServices.forEach((ps) => {
       const parentId = ps.service?.parent?.toString();
       if (parentId) countMap[parentId] = (countMap[parentId] || 0) + 1;
     });
-    const result = categories.map((cat) => ({ _id: cat._id, name: cat.name, icon: cat.icon, isBasic: cat.provider === null, count: countMap[cat._id.toString()] || 0 }));
+
+    const result = categories.map((cat) => ({
+      _id: cat._id,
+      name: cat.name,
+      icon: cat.icon,
+      isBasic: cat.provider === null,
+      count: countMap[cat._id.toString()] || 0,
+      catalogServices: childrenByParent[cat._id.toString()] || [],
+    }));
+
     res.status(200).json({ success: true, count: result.length, data: result });
-  } catch (error) { res.status(500).json({ success: false, message: error.message }); }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 const addCategory = async (req, res) => {
   try {
     const { name, icon } = req.body;
     if (!name) return res.status(400).json({ success: false, message: "اسم التصنيف مطلوب" });
-    const category = await Service.create({ name, icon: icon || "", parent: null, provider: req.shop._id });
+    const category = await Service.create({ name, icon: icon || "", parent: null, provider: req.user._id });
     res.status(201).json({ success: true, message: "تم إضافة التصنيف", data: category });
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
 };
 
 const deleteCategory = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const category = await Service.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: "التصنيف مش موجود" });
     if (!category.provider) return res.status(403).json({ success: false, message: "لا يمكن حذف تصنيف أساسي" });
@@ -445,7 +475,7 @@ const deleteCategory = async (req, res) => {
 
 const getServices = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const filter = { provider: providerId };
     if (req.query.active !== undefined) filter.is_active = req.query.active === "true";
     let result = await ProviderService.find(filter).populate({ path: "service", select: "name description icon parent duration_hours unit", populate: { path: "parent", select: "name icon" } });
@@ -466,13 +496,54 @@ const getServiceById = async (req, res) => {
 
 const addService = async (req, res) => {
   try {
-    const providerId = req.shop._id;
-    const { categoryId, name, description, icon, duration_hours, unit, price, fast_service, fast_multiplier, is_active } = req.body;
-    if (!categoryId || !name || price === undefined) return res.status(400).json({ success: false, message: "categoryId واسم الخدمة والسعر مطلوبين" });
+    const providerId = req.user._id;
+    const { categoryId, serviceId, name, description, icon, duration_hours, unit, price, fast_service, fast_multiplier, is_active } = req.body;
+    if (price === undefined) return res.status(400).json({ success: false, message: "السعر مطلوب" });
+
+    // Link existing catalog child service
+    if (serviceId) {
+      const catalogService = await Service.findOne({
+        _id: serviceId,
+        provider: null,
+        parent: { $ne: null },
+        is_active: true,
+      });
+      if (!catalogService) {
+        return res.status(404).json({ success: false, message: "الخدمة غير موجودة في الكatalog" });
+      }
+
+      const existing = await ProviderService.findOne({ provider: providerId, service: serviceId });
+      if (existing) {
+        return res.status(409).json({ success: false, message: "الخدمة مضافة بالفعل" });
+      }
+
+      const newPS = await ProviderService.create({
+        provider: providerId,
+        service: serviceId,
+        price,
+        unit: unit || catalogService.unit,
+        fast_service: fast_service ?? false,
+        fast_multiplier: fast_multiplier ?? 1.5,
+        is_active: is_active !== undefined ? is_active : true,
+      });
+
+      const populated = await newPS.populate({
+        path: "service",
+        select: "name description icon parent duration_hours unit",
+        populate: { path: "parent", select: "name icon" },
+      });
+
+      return res.status(201).json({ success: true, message: "تمت إضافة الخدمة بنجاح", data: populated });
+    }
+
+    if (!categoryId || !name) {
+      return res.status(400).json({ success: false, message: "categoryId واسم الخدمة مطلوبين" });
+    }
+
     const category = await Service.findOne({ _id: categoryId, parent: null, $or: [{ provider: null }, { provider: providerId }] });
     if (!category) return res.status(404).json({ success: false, message: "التصنيف مش موجود" });
     const newService = await Service.create({ name, description: description || "", icon: icon || "", parent: categoryId, provider: providerId, duration_hours: duration_hours ?? 24, unit: unit || "per_piece", is_active: is_active !== undefined ? is_active : true });
-    const newPS = await ProviderService.create({ provider: providerId, service: newService._id, price, fast_service: fast_service ?? false, fast_multiplier: fast_multiplier ?? 1.5, is_active: is_active !== undefined ? is_active : true });
+    const newPS = await ProviderService.create({ provider: providerId, service: newService._id, price, unit: unit || "per_piece", fast_service: fast_service ?? false, fast_multiplier: fast_multiplier ?? 1.5, is_active: is_active !== undefined ? is_active : true });
     const populated = await newPS.populate({ path: "service", select: "name description icon parent duration_hours unit", populate: { path: "parent", select: "name icon" } });
     res.status(201).json({ success: true, message: "تمت إضافة الخدمة بنجاح", data: populated });
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
@@ -480,7 +551,7 @@ const addService = async (req, res) => {
 
 const updateService = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const ps = await ProviderService.findOne({ _id: req.params.id, provider: providerId });
     if (!ps) return res.status(404).json({ success: false, message: "الخدمة مش موجودة" });
     ["price", "fast_service", "fast_multiplier", "is_active"].forEach((f) => { if (req.body[f] !== undefined) ps[f] = req.body[f]; });
@@ -495,7 +566,7 @@ const updateService = async (req, res) => {
 
 const deleteService = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const ps = await ProviderService.findOneAndDelete({ _id: req.params.id, provider: providerId });
     if (!ps) return res.status(404).json({ success: false, message: "الخدمة مش موجودة" });
     await Service.findOneAndDelete({ _id: ps.service, provider: providerId });
@@ -504,3 +575,7 @@ const deleteService = async (req, res) => {
 };
 
 module.exports = { getCategories, addCategory, deleteCategory, getServices, getServiceById, addService, updateService, deleteService };
+
+
+
+

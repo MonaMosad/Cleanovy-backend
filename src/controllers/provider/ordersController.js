@@ -226,19 +226,137 @@
 
 
 
+// const Order = require("../../models/orderModel");
+// const OrderItem = require("../../models/orderItemModel");
+// const Service = require("../../models/serviceModel");
+
+// const getOrders = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     console.log("Provider ID:", req.user._id);
+//     const { status } = req.query;
+//     const filter = { provider: providerId };
+//     if (status) filter.status = status;
+
+//     const orders = await Order.find(filter)
+//       .populate("client", "name fullName phone")
+//       .populate("address", "address")
+//       .sort({ createdAt: -1 });
+
+//     res.status(200).json({ success: true, nOfOrders: orders.length, data: orders });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// const getTodayReport = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
+//     const endOfDay = new Date(); endOfDay.setUTCHours(23, 59, 59, 999);
+
+//     const orders = await Order.find({ provider: providerId, createdAt: { $gte: startOfDay, $lte: endOfDay } });
+//     const totalRevenue = orders.filter((o) => o.status === "delivered").reduce((sum, o) => sum + o.total_price, 0);
+
+//     res.status(200).json({
+//       success: true,
+//       data: {
+//         totalOrders: orders.length,
+//         totalRevenue,
+//         cancelledOrders: orders.filter((o) => o.status === "cancelled").length,
+//         deliveredOrders: orders.filter((o) => o.status === "delivered").length,
+//         orders,
+//       },
+//     });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// const getOrderById = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     const order = await Order.findOne({ _id: req.params.id, provider: providerId })
+//       .populate("client", "name fullName phone")
+//       .populate("address", "address")
+//       .populate("delivery", "name phone");
+
+//     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });
+
+//     const items = await OrderItem.find({ order: order._id }).populate({
+//       path: "service", select: "name parent", populate: { path: "parent", select: "name" },
+//     });
+
+//     res.status(200).json({ success: true, data: { ...order.toObject(), items } });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// const acceptOrder = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     const order = await Order.findOneAndUpdate(
+//       { _id: req.params.orderId, provider: providerId, status: "pending" },
+//       { status: "accepted" }, { new: true }
+//     );
+//     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود أو مش جديد" });
+//     res.status(200).json({ success: true, message: "تم قبول الطلب بنجاح", data: order });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// const rejectOrder = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     const { cancel_reason } = req.body;
+//     if (!cancel_reason) return res.status(400).json({ success: false, message: "لازم تبعت سبب الرفض" });
+
+//     const order = await Order.findOneAndUpdate(
+//       { _id: req.params.orderId, provider: providerId, status: "pending" },
+//       { status: "cancelled", cancel_reason }, { new: true }
+//     );
+//     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });
+//     res.status(200).json({ success: true, message: "تم رفض الطلب", data: order });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// const updateOrderStatus = async (req, res) => {
+//   try {
+//     const providerId = req.user._id;
+//     const { status } = req.body;
+//     const allowedStatuses = ["accepted", "in_progress", "ready", "out_for_delivery", "delivered", "cancelled"];
+//     if (!allowedStatuses.includes(status)) return res.status(400).json({ success: false, message: "حالة غير صحيحة" });
+
+//     const order = await Order.findOneAndUpdate(
+//       { _id: req.params.orderId, provider: providerId },
+//       { status }, { new: true }
+//     );
+//     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });
+//     res.status(200).json({ success: true, data: order });
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message });
+//   }
+// };
+
+// module.exports = { getOrders, getOrderById, acceptOrder, rejectOrder, updateOrderStatus, getTodayReport };
+
+
 const Order = require("../../models/orderModel");
 const OrderItem = require("../../models/orderItemModel");
-const Service = require("../../models/serviceModel");
 
 const getOrders = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { status } = req.query;
     const filter = { provider: providerId };
     if (status) filter.status = status;
 
     const orders = await Order.find(filter)
-      .populate("client", "name fullName phone")
+      .populate("client", "fullName name phone")
       .populate("address", "address")
       .sort({ createdAt: -1 });
 
@@ -250,7 +368,7 @@ const getOrders = async (req, res) => {
 
 const getTodayReport = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
     const endOfDay = new Date(); endOfDay.setUTCHours(23, 59, 59, 999);
 
@@ -260,8 +378,7 @@ const getTodayReport = async (req, res) => {
     res.status(200).json({
       success: true,
       data: {
-        totalOrders: orders.length,
-        totalRevenue,
+        totalOrders: orders.length, totalRevenue,
         cancelledOrders: orders.filter((o) => o.status === "cancelled").length,
         deliveredOrders: orders.filter((o) => o.status === "delivered").length,
         orders,
@@ -274,9 +391,9 @@ const getTodayReport = async (req, res) => {
 
 const getOrderById = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const order = await Order.findOne({ _id: req.params.id, provider: providerId })
-      .populate("client", "name fullName phone")
+      .populate("client", "fullName name phone")
       .populate("address", "address")
       .populate("delivery", "name phone");
 
@@ -294,7 +411,7 @@ const getOrderById = async (req, res) => {
 
 const acceptOrder = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const order = await Order.findOneAndUpdate(
       { _id: req.params.orderId, provider: providerId, status: "pending" },
       { status: "accepted" }, { new: true }
@@ -308,7 +425,7 @@ const acceptOrder = async (req, res) => {
 
 const rejectOrder = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { cancel_reason } = req.body;
     if (!cancel_reason) return res.status(400).json({ success: false, message: "لازم تبعت سبب الرفض" });
 
@@ -325,7 +442,7 @@ const rejectOrder = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { status } = req.body;
     const allowedStatuses = ["accepted", "in_progress", "ready", "out_for_delivery", "delivered", "cancelled"];
     if (!allowedStatuses.includes(status)) return res.status(400).json({ success: false, message: "حالة غير صحيحة" });

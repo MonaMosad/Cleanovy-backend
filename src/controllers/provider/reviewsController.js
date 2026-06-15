@@ -222,7 +222,7 @@ function toReviewDTO(doc) {
 
 const getReviews = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const reviews = await Review.find({ provider: providerId }).sort({ createdAt: -1 });
     const data = reviews.map(toReviewDTO);
     const total = reviews.length;
@@ -237,7 +237,7 @@ const getReviews = async (req, res) => {
 
 const replyToReview = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { reply } = req.body;
     if (!reply || !reply.trim())
       return res.status(400).json({ success: false, message: "نص الرد مطلوب" });

@@ -64,6 +64,18 @@ exports.restrictTo = (...roles) => {
   };
 };
 
+/** Allows laundry_owner (canonical) and legacy provider role */
+exports.restrictToProvider = (req, res, next) => {
+  const allowed = ["provider", "laundry_owner"];
+  if (!allowed.includes(req.user.role)) {
+    return res.status(403).json({
+      status: "fail",
+      message: "ليس لديك صلاحية للوصول إلى هذا المورد",
+    });
+  }
+  next();
+};
+
 // ─── Optional Auth: attach user if token present 
 exports.optionalAuth = async (req, res, next) => {
   try {

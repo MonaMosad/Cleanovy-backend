@@ -15,3 +15,5 @@
     at model.<anonymous> (D:\Cleanovy-backend\src\models\userModel.js:110:44)
     at Kareem.execPre (D:\Cleanovy-backend\node_modules\kareem\index.js:59:39)
     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[2026-06-15 12:33:37] ERROR: Uncaught Exception: listen EADDRINUSE: address already in use :::3000
+[2026-06-15 12:55:51] ERROR: Uncaught Exception: listen EADDRINUSE: address already in use :::3000

@@ -231,7 +231,7 @@ const buildDashboardData = async (providerId, maxOrders = 20) => {
 
 const getDashboardStats = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const maxOrders = req.shop.max_daily_orders ?? 20;
     const data = await buildDashboardData(providerId, maxOrders);
     res.status(200).json({ success: true, data });
@@ -241,7 +241,7 @@ const getDashboardStats = async (req, res) => {
 };
 
 const getDashboardLive = async (req, res) => {
-  const providerId = req.shop._id;
+  const providerId = req.user._id;
   const maxOrders = req.shop.max_daily_orders ?? 20;
 
   res.setHeader("Content-Type", "text/event-stream");

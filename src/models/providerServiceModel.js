@@ -23,7 +23,7 @@ const providerServiceSchema = new mongoose.Schema(
     // ✅ ADDED: allows override of the global service unit at provider level
     unit: {
       type: String,
-      enum: ["per_piece", "per_kg", "per_set"],
+      enum: ["per_piece", "per_kg", "per_meter", "per_set"],
       default: "per_piece",
     },
 

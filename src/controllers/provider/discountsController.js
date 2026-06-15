@@ -327,7 +327,7 @@ const SpecialEntityDiscount = require("../../models/specialEntityDiscountModel")
 
 const getDiscountTiers = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const tiers = await DiscountTier.find({ provider: providerId }).sort({ minQty: 1 });
     res.status(200).json({ success: true, count: tiers.length, data: tiers });
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
@@ -335,7 +335,7 @@ const getDiscountTiers = async (req, res) => {
 
 const createDiscountTier = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { name, minQty, maxQty, discount, color, is_active } = req.body;
     if (!name || minQty === undefined || discount === undefined)
       return res.status(400).json({ success: false, message: "الاسم والحد الأدنى ونسبة الخصم مطلوبين" });
@@ -361,7 +361,7 @@ const createDiscountTier = async (req, res) => {
 
 const updateDiscountTier = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const allowedFields = ["name", "discount", "is_active", "color", "minQty", "maxQty"];
     const updates = {};
     allowedFields.forEach((f) => { if (req.body[f] !== undefined) updates[f] = req.body[f]; });
@@ -378,7 +378,7 @@ const updateDiscountTier = async (req, res) => {
 
 const toggleDiscountTier = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const tier = await DiscountTier.findOne({ _id: req.params.id, provider: providerId });
     if (!tier) return res.status(404).json({ success: false, message: "المستوى مش موجود" });
     tier.is_active = !tier.is_active;
@@ -408,7 +408,7 @@ const updateSpecialEntity = async (req, res) => {
     const updates = {};
     allowedFields.forEach((f) => { if (req.body[f] !== undefined) updates[f] = req.body[f]; });
     const updated = await SpecialEntityDiscount.findOneAndUpdate(
-      { _id: req.params.id, provider: req.shop._id }, updates, { new: true }
+      { _id: req.params.id, provider: req.user._id }, updates, { new: true }
     );
     if (!updated) return res.status(404).json({ success: false, message: "الجهة مش موجودة" });
     res.status(200).json({ success: true, message: "تم تحديث خصم الجهة", data: updated });
@@ -417,7 +417,7 @@ const updateSpecialEntity = async (req, res) => {
 
 const saveAllSpecialEntities = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const { entities } = req.body;
     if (!Array.isArray(entities) || entities.length === 0)
       return res.status(400).json({ success: false, message: "entities array مطلوبة" });
@@ -437,7 +437,7 @@ const saveAllSpecialEntities = async (req, res) => {
 
 const simulateDiscount = async (req, res) => {
   try {
-    const providerId = req.shop._id;
+    const providerId = req.user._id;
     const qty = Number(req.query.qty);
     if (!qty || qty < 1) return res.status(400).json({ success: false, message: "qty مطلوب وأكبر من 0" });
 

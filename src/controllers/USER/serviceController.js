@@ -1,26 +1,57 @@
 // controllers/serviceController.js
 const Service = require("../../models/serviceModel.js");
+const { CATEGORY_NAMES } = require("../../data/serviceCatalog");
 
 const getServices = async (req, res) => {
   try {
-    // Return tree: top-level categories with their children
-    const all = await Service.find().populate("parent", "name");
-    const categories = all.filter((s) => !s.parent);
+    const categories = await Service.find({
+      parent: null,
+      provider: null,
+      is_active: true,
+      name: { $in: CATEGORY_NAMES },
+    }).sort({ name: 1 });
+
+    const categoryIds = categories.map((c) => c._id);
+    const children = await Service.find({
+      parent: { $in: categoryIds },
+      provider: null,
+      is_active: true,
+    }).populate("parent", "name icon");
+
     const result = categories.map((cat) => ({
       ...cat.toObject(),
-      children: all.filter((s) => s.parent && s.parent._id.toString() === cat._id.toString()),
+      children: children.filter(
+        (s) => s.parent && s.parent._id.toString() === cat._id.toString()
+      ),
     }));
-    res.json(result);
+
+    res.json({ success: true, count: result.length, data: result });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
 const createService = async (req, res) => {
   try {
-    const { name, parent } = req.body;
+    const { name, parent, unit, icon } = req.body;
     if (!name) return res.status(400).json({ message: "name required" });
-    const service = await Service.create({ name, parent: parent || null });
+
+    if (parent) {
+      const parentCat = await Service.findOne({ _id: parent, parent: null, provider: null });
+      if (!parentCat) {
+        return res.status(400).json({ message: "Invalid parent category" });
+      }
+    } else if (!CATEGORY_NAMES.includes(name)) {
+      return res.status(400).json({ message: "Top-level entries must be catalog categories" });
+    }
+
+    const service = await Service.create({
+      name,
+      parent: parent || null,
+      unit: unit || "per_piece",
+      icon: icon || "",
+      provider: null,
+    });
     res.status(201).json(service);
   } catch (err) {
     res.status(500).json({ message: err.message });
