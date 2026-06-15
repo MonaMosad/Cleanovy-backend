@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 515fce0 (feat: Refactor order management and add coupon functionality)
 require("dotenv").config();
 const app = require("./app");
 const connectDB = require("./config/db");

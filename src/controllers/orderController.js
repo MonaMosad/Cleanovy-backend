@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 // src/controllers/orderController.js
 const mongoose = require("mongoose");
 const Order = require("../models/orderModel.js");
@@ -15,10 +11,7 @@ const { onOrderDelivered } = require("./paymentController.js");
 
 const COMMISSION_RATE = 0.1;
 
-<<<<<<< HEAD
 // ─── مصفوفة تدفق الحالات الصارمة ──────────────────────────────────────────────
-=======
->>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 const STATUS_FLOW = {
   pending:          ["accepted", "cancelled"],
   accepted:         ["picked_up", "cancelled"],
@@ -30,7 +23,6 @@ const STATUS_FLOW = {
   cancelled:        [],
 };
 
-<<<<<<< HEAD
 // ─── دالة مساعدة لحساب خصم الكوبون ───────────────────────────────────────────
 const calcCouponDiscount = (coupon, baseAmount) => {
   if (!coupon) return 0;
@@ -46,8 +38,6 @@ const calcCouponDiscount = (coupon, baseAmount) => {
   return Math.round(disc * 100) / 100;
 };
 
-=======
->>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 // ══════════════════════════════════════════════════════════════
 // 1. إنشاء طلب جديد — POST /api/orders
 // ══════════════════════════════════════════════════════════════
@@ -86,11 +76,7 @@ const createOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("المغسلة غير موجودة أو غير موثقة", 404));
 
   if (providerDoc.is_suspended)
-<<<<<<< HEAD
     return next(new AppError("المغسلة موقوفة مؤقتاً بسبب عمولات غير مسددة", 403));
-=======
-    return next(new AppError("المغسلة موقوفة مؤقتاً", 403));
->>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 
   const normalizedItems = items.map((item) => ({
     serviceId: item.providerService_id || item.provider_service_id,
