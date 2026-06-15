@@ -199,3 +199,20 @@ SIGINT received. Shutting down gracefully...
       
 [2026-06-15 09:31:54] INFO: 
 SIGINT received. Shutting down gracefully...
+[2026-06-15 09:33:57] INFO: 
+         claenovy API SERVER             
+   Status  : Running                     
+   Port    : 5000                         
+   Env     : development         
+   Version : v1                  
+ 
+      
+[2026-06-15 09:34:03] INFO: 
+SIGINT received. Shutting down gracefully...
+[2026-06-15 09:38:05] INFO: 
+         claenovy API SERVER
+   Status  : Running
+   Port    : 5000
+   Env     : development
+   Version : v1
+      
