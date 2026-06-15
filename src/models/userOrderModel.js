@@ -32,9 +32,8 @@ const userOrderSchema = new mongoose.Schema({
   },
 }, { timestamps: true, collection: "user_orders" });
 
-userOrderSchema.pre("save", function (next) {
+userOrderSchema.pre("save", async function () {
   if (!this.orderNumber) this.orderNumber = `CLN-${Date.now()}`;
-  next();
 });
 
 module.exports = mongoose.model("UserOrder", userOrderSchema);

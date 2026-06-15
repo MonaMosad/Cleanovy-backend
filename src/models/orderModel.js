@@ -416,7 +416,7 @@ const orderSchema = new mongoose.Schema(
     address: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
-      required: true,
+      default: null,
     },
 
     delivery_type: {
@@ -424,6 +424,13 @@ const orderSchema = new mongoose.Schema(
       enum: ["pickup", "delivery"],
       required: true,
       default: "delivery",
+    },
+
+    // عنوان التوصيل كنص حر (للطلبات التي لا تستخدم Address collection)
+    delivery_address: {
+      type: String,
+      default: null,
+      maxlength: 500,
     },
 
     delivery: {

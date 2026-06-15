@@ -195,6 +195,8 @@ exports.placeOrder = async (req, res) => {
     const { shopId, customerName, phone, address, notes,
             paymentMethod, deliveryFee = 0, items } = req.body;
 
+    console.log("[placeOrder] body:", JSON.stringify({ shopId, paymentMethod, deliveryFee, itemsCount: items?.length }));
+
     if (!shopId)        return res.status(400).json({ success: false, message: "shopId مطلوب" });
     if (!items?.length) return res.status(400).json({ success: false, message: "items مطلوب" });
 
@@ -202,9 +204,10 @@ exports.placeOrder = async (req, res) => {
     if (!shop) return res.status(404).json({ success: false, message: "المغسلة غير موجودة" });
 
     const priced = await priceCart(items, { deliveryFee });
+    console.log("[placeOrder] priced lineItems:", priced.lineItems.length, "total:", priced.total);
 
     if (!priced.lineItems.length)
-      return res.status(400).json({ success: false, message: "لا توجد عناصر صالحة في الطلب" });
+      return res.status(400).json({ success: false, message: "لا توجد عناصر صالحة في الطلب — تأكد من صحة الـ serviceIds" });
 
     const order = await UserOrder.create({
       shop:         shopId,
@@ -227,8 +230,10 @@ exports.placeOrder = async (req, res) => {
       currency:     priced.currency,
     });
 
+    console.log("[placeOrder] ✅ order created:", order._id, "orderNumber:", order.orderNumber);
     res.status(201).json({ success: true, data: order });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    console.error("[placeOrder] ❌ error:", err.message, "\n", err.stack);
+    res.status(500).json({ success: false, message: err.message, stack: process.env.NODE_ENV === "development" ? err.stack : undefined });
   }
 };
