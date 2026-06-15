@@ -442,6 +442,8 @@ const ordersRoutes = require('./routes/provider/ordersRoutes');
 const adminReviewsRoutes = require("./routes/admin/reviews.routes");
 const adminDashboardRoutes = require("./routes/admin/dashboard.routes");
 const adminUsersRoutes = require("./routes/admin/users.routes");
+const shopPageRoutes = require("./routes/USER/shopPageRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 const app = express();
 
 // ─── Ensure uploads directory exists ─────────────────────────────────────────
@@ -517,6 +519,10 @@ app.use("/api/regions", regionRoutes);
 app.use("/api/delivery", deliveryRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/users", userRoutes);
+// ─── User-facing shop page routes ────────────────────────────────────────────
+app.use("/api/page", shopPageRoutes);
+app.use("/api/contact", contactRoutes);
+
 // ─── Admin Panel routes (no auth) — must be registered BEFORE /api/admin ─────
 app.use("/api/admin/dashboard", adminDashboardRoutes);
 app.use("/api/admin/users", adminUsersRoutes);

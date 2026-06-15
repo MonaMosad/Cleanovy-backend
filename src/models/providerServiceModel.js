@@ -26,6 +26,12 @@ const providerServiceSchema = new mongoose.Schema(
     },
 
     is_active: { type: Boolean, default: true },
+
+    // ── Fast service support ──────────────────────────────────
+    fast_service:    { type: Boolean, default: false },
+    fast_multiplier: { type: Number,  default: 1 },
+    name:            { type: String,  default: null },   // optional name override
+    category:        { type: String,  default: null },   // optional category override
   },
   { timestamps: true }
 );
