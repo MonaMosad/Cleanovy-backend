@@ -13,7 +13,7 @@ const createTransporter = () => {
   });
 };
 
-// ─── Email HTML Template ──────────────────────────────────────────────────────
+// ─── Email HTML Template 
 const baseTemplate = (title, content) => `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -62,7 +62,7 @@ const baseTemplate = (title, content) => `
 </html>
 `;
 
-// ─── Verification Success Page (HTML) ────────────────────────────────────────
+// ─── Verification Success Page (HTML)  
 const verificationSuccessPage = (name) => `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -110,7 +110,7 @@ const verificationSuccessPage = (name) => `
 </html>
 `;
 
-// ─── Verification Error Page (HTML) ──────────────────────────────────────────
+// ─── Verification Error Page (HTML)  
 const verificationErrorPage = (message) => `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -151,7 +151,7 @@ const verificationErrorPage = (message) => `
 </html>
 `;
 
-// ─── Core send function ───────────────────────────────────────────────────────
+// ─── Core send function  
 const sendEmail = async ({ to, subject, html }) => {
   try {
     const transporter = createTransporter();
@@ -173,7 +173,7 @@ const sendEmail = async ({ to, subject, html }) => {
   }
 };
 
-// ─── Send Verification Email ──────────────────────────────────────────────────
+// ─── Send Verification Email  
 const sendVerificationEmail = async (user, token) => {
   const verifyUrl = `${process.env.BASE_URL}/api/v1/auth/verify-email/${token}`;
   const content = `
@@ -192,7 +192,7 @@ const sendVerificationEmail = async (user, token) => {
   });
 };
 
-// ─── Send Password Reset Email ────────────────────────────────────────────────
+// ─── Send Password Reset Email  
 const sendPasswordResetEmail = async (user, token) => {
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
   const content = `
