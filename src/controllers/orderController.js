@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 // src/controllers/orderController.js
 const mongoose = require("mongoose");
 const Order = require("../models/orderModel.js");
@@ -11,7 +15,10 @@ const { onOrderDelivered } = require("./paymentController.js");
 
 const COMMISSION_RATE = 0.1;
 
+<<<<<<< HEAD
 // ─── مصفوفة تدفق الحالات الصارمة ──────────────────────────────────────────────
+=======
+>>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 const STATUS_FLOW = {
   pending:          ["accepted", "cancelled"],
   accepted:         ["picked_up", "cancelled"],
@@ -23,6 +30,7 @@ const STATUS_FLOW = {
   cancelled:        [],
 };
 
+<<<<<<< HEAD
 // ─── دالة مساعدة لحساب خصم الكوبون ───────────────────────────────────────────
 const calcCouponDiscount = (coupon, baseAmount) => {
   if (!coupon) return 0;
@@ -38,6 +46,8 @@ const calcCouponDiscount = (coupon, baseAmount) => {
   return Math.round(disc * 100) / 100;
 };
 
+=======
+>>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 // ══════════════════════════════════════════════════════════════
 // 1. إنشاء طلب جديد — POST /api/orders
 // ══════════════════════════════════════════════════════════════
@@ -76,7 +86,11 @@ const createOrder = catchAsync(async (req, res, next) => {
     return next(new AppError("المغسلة غير موجودة أو غير موثقة", 404));
 
   if (providerDoc.is_suspended)
+<<<<<<< HEAD
     return next(new AppError("المغسلة موقوفة مؤقتاً بسبب عمولات غير مسددة", 403));
+=======
+    return next(new AppError("المغسلة موقوفة مؤقتاً", 403));
+>>>>>>> 4f72deb4f5a70e256db8c0a13d39cad6a9cc3d66
 
   const normalizedItems = items.map((item) => ({
     serviceId: item.providerService_id || item.provider_service_id,
@@ -118,13 +132,12 @@ const createOrder = catchAsync(async (req, res, next) => {
 
   const shipping = delivery_type === "pickup" ? 0 : Number(shipping_price) || 20;
 
-  // ── Coupon Logic ──────────────────────────────────────────
+  // ── Coupon ────────────────────────────────────────────────
   let couponDoc = null;
   let discount = 0;
   let couponId = null;
-  const clientId = req.user?._id;
-
-  if (!clientId) return next(new AppError("يجب تسجيل الدخول لإتمام الطلب", 401));
+  const clientId = req.user._id;
+  // const clientId = req.user?._id ?? "6a0ec5d6abd344d2021f462a";
 
   if (coupon_code) {
     couponDoc = await Coupon.findOne({
@@ -134,7 +147,7 @@ const createOrder = catchAsync(async (req, res, next) => {
     });
 
     if (!couponDoc)
-      return next(new AppError("الكوبون غير موجود أو غير صالح لهذا المزود", 400));
+      return next(new AppError("الكوبون غير موجود أو غير صالح", 400));
     if (couponDoc.expires_at && couponDoc.expires_at < new Date())
       return next(new AppError("انتهت صلاحية الكوبون", 400));
     if (couponDoc.max_uses !== null && couponDoc.used_count >= couponDoc.max_uses)
@@ -144,7 +157,13 @@ const createOrder = catchAsync(async (req, res, next) => {
     if (provider_price < couponDoc.min_order_amount)
       return next(new AppError(`الحد الأدنى لقيمة الطلب هو ${couponDoc.min_order_amount}`, 400));
 
-    discount = calcCouponDiscount(couponDoc, provider_price);
+    if (couponDoc.discount_type === "percentage") {
+      discount = (provider_price * couponDoc.discount_value) / 100;
+      if (couponDoc.max_discount_amount) discount = Math.min(discount, couponDoc.max_discount_amount);
+    } else {
+      discount = Math.min(couponDoc.discount_value, provider_price);
+    }
+    discount = Math.round(discount * 100) / 100;
     couponId = couponDoc._id;
   }
 
@@ -269,9 +288,89 @@ const updateSchedule = catchAsync(async (req, res, next) => {
   res.status(200).json({ success: true, message: "تم تحديث المواعيد بنجاح", data: { order } });
 });
 
+// ══════════════════════════════════════════════════════════════
+// 5. الطلبات النشطة — GET /api/orders/me/current
+// ══════════════════════════════════════════════════════════════
+const getCurrentOrders = catchAsync(async (req, res, next) => {
+  const ACTIVE_STATUSES = ["pending","accepted","picked_up","in_progress","ready","out_for_delivery"];
+  const orders = await Order.find({ client: req.user._id, status: { $in: ACTIVE_STATUSES } })
+    .populate("provider", "name address")
+    .sort({ createdAt: -1 }).lean();
+
+  res.status(200).json({ success: true, data: { count: orders.length, orders } });
+});
+
+// ══════════════════════════════════════════════════════════════
+// 6. سجل الطلبات — GET /api/orders/me/history
+// ══════════════════════════════════════════════════════════════
+const getOrderHistory = catchAsync(async (req, res, next) => {
+  const page  = Math.max(parseInt(req.query.page)  || 1, 1);
+  const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+  const filter = { client: req.user._id, status: { $in: ["delivered", "cancelled"] } };
+
+  const [orders, total] = await Promise.all([
+    Order.find(filter).populate("provider", "name address")
+      .sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+    Order.countDocuments(filter),
+  ]);
+
+  res.status(200).json({ success: true, data: { total, page, pages: Math.ceil(total / limit), orders } });
+});
+
+// ══════════════════════════════════════════════════════════════
+// 7. كل الطلبات للعميل — GET /api/orders/me/all
+// ══════════════════════════════════════════════════════════════
+const getAllOrders = catchAsync(async (req, res, next) => {
+  const page  = Math.max(parseInt(req.query.page)  || 1, 1);
+  const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+
+  const [orders, total] = await Promise.all([
+    Order.find({ client: req.user._id }).populate("provider", "name address")
+      .sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+    Order.countDocuments({ client: req.user._id }),
+  ]);
+
+  res.status(200).json({ success: true, data: { total, page, pages: Math.ceil(total / limit), orders } });
+});
+
+// ══════════════════════════════════════════════════════════════
+// 8. كل الطلبات للأدمن — GET /api/orders/admin/all
+// ══════════════════════════════════════════════════════════════
+const getAllOrdersForAdmin = catchAsync(async (req, res, next) => {
+  const page  = Math.max(parseInt(req.query.page)  || 1, 1);
+  const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+
+  const [orders, total] = await Promise.all([
+    Order.find({}).populate("client", "fullName email").populate("provider", "name address")
+      .sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit).lean(),
+    Order.countDocuments(),
+  ]);
+
+  res.status(200).json({ success: true, data: { total, page, pages: Math.ceil(total / limit), orders } });
+});
+
+// ══════════════════════════════════════════════════════════════
+// 9. عناصر الطلب — GET /api/orders/:id/items
+// ══════════════════════════════════════════════════════════════
+const getOrderItems = catchAsync(async (req, res, next) => {
+  const items = await OrderItem.find({ order: req.params.id })
+    .populate({ path: "service", populate: { path: "service", select: "name parent" } });
+  res.json(items);
+});
+
+// ── Single exports ────────────────────────────────────────────
 module.exports = {
   createOrder,
   getOrderById,
   updateOrderStatus,
   updateSchedule,
+
+  getOrders: getAllOrders,
+  updateOrderStatus,
+  updateSchedule,
+  getCurrentOrders,
+  getOrderHistory,
+  getAllOrders,
+  getAllOrdersForAdmin,
+  getOrderItems,
 };
