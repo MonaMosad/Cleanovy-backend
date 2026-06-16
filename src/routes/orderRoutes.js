@@ -7,11 +7,11 @@ const {
   getOrders,
 } = require("../controllers/orderController.js");
 
-// const { protect } = require("../middleware/authMiddleware.js");
+const { protect } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
-// router.use(protect);
+router.use(protect);
 
 router.post("/",              createOrder);
 router.get("/",               getOrders);

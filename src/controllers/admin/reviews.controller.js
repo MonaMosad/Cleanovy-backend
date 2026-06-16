@@ -9,7 +9,7 @@ const escapeRegex = (str = "") => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
    - provider: id المغسلة
    - rating: 1..5
    - status: visible (افتراضي) | hidden | all
-   - search: بيدوّر في التعليق
+   - search: بيدوّر في التعليق أو اسم العميل
 ────────────────────────────────────────────────────────────── */
 exports.getReviews = async (req, res, next) => {
   try {
@@ -38,22 +38,24 @@ exports.getReviews = async (req, res, next) => {
       query.rating = rating;
     }
 
-    // سيرش في التعليق
+    // سيرش في التعليق أو اسم العميل
     if (search) {
-      query.comment = new RegExp(escapeRegex(search), "i");
+      const regex = new RegExp(escapeRegex(search), "i");
+      query.$or = [{ comment: regex }, { customerName: regex }];
     }
 
     const [reviews, total, totalAll] = await Promise.all([
       Review.find(query)
-        .select("client provider rating comment is_hidden createdAt")
-        .populate("client", "fullName avatar")
+        .select("customer order provider customerName avatar orderCode rating comment reply repliedAt is_hidden createdAt")
+        .populate("customer", "fullName name")
+        .populate({ path: "order", select: "client", populate: { path: "client", select: "fullName name" } })
         .populate("provider", "name")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean(),
       Review.countDocuments(query),
-      Review.countDocuments({ is_hidden: false }), // إجمالي التقييمات الظاهرة (للعدّاد فوق)
+      Review.countDocuments({ is_hidden: false }),
     ]);
 
     res.json({
@@ -61,14 +63,20 @@ exports.getReviews = async (req, res, next) => {
       data: {
         totalReviews: totalAll,
         reviews: reviews.map((r) => ({
-          id:        r._id,
-          client:    r.client?.fullName || "مجهول",
-          avatar:    r.client?.avatar || null,
-          provider:  r.provider?.name || "—",
-          rating:    r.rating,
-          comment:   r.comment,
-          isHidden:  r.is_hidden,
-          createdAt: r.createdAt,
+          id:         r._id,
+          client:     r.customer?.fullName || r.customer?.name
+                   || r.order?.client?.fullName || r.order?.client?.name
+                   || (r.customerName !== "عميل" ? r.customerName : null)
+                   || null,
+          avatar:     r.avatar,
+          provider:   r.provider?.name || "—",
+          orderCode:  r.orderCode,
+          rating:     r.rating,
+          comment:    r.comment,
+          reply:      r.reply,
+          repliedAt:  r.repliedAt,
+          isHidden:   r.is_hidden,
+          createdAt:  r.createdAt,
         })),
         pagination: { total, page, limit, totalPages: Math.ceil(total / limit) || 1 },
       },

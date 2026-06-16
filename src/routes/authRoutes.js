@@ -61,14 +61,12 @@ router.get(
   passport.authenticate("facebook", { session: false, failureRedirect: "/login" }),
   facebookCallback
 );
-// ─── Protected Routes  
-// router.use(protect); // All routes below require login
-
-router.get("/me", getMe);
-router.post("/logout", logout);
-router.post("/change-password", validateChangePassword, changePassword);
+// ─── Protected Routes
+router.get("/me", protect, getMe);
+router.post("/logout", protect, logout);
+router.post("/change-password", protect, validateChangePassword, changePassword);
 
 // ─── Laundry Shop (for laundry_owner role)
-router.post("/laundry-shop", createLaundryShop);
+router.post("/laundry-shop", protect, createLaundryShop);
 
 module.exports = router;

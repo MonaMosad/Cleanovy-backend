@@ -216,7 +216,7 @@ const getShopById = async (req, res) => {
 
     // Reviews (latest 10)
     const reviews = await Review.find({ provider: shop._id })
-      .populate("client", "name")
+      .populate("customer", "fullName name")
       .sort({ createdAt: -1 })
       .limit(10);
 
@@ -342,7 +342,7 @@ const getShopReviews = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const reviews = await Review.find({ provider: req.params.id })
-      .populate("client", "name")
+      .populate("customer", "fullName name")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(parseInt(limit));

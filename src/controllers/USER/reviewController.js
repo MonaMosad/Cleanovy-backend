@@ -19,13 +19,15 @@ const createReview = async (req, res) => {
     if (order.status !== "delivered")
       return res.status(400).json({ message: "Can only review delivered orders" });
 
-    const existing = await Review.findOne({ order: orderId, client: req.user._id });
+    const existing = await Review.findOne({ order: orderId, customer: req.user._id });
     if (existing) return res.status(409).json({ message: "Already reviewed this order" });
 
     const review = await Review.create({
       provider: order.provider,
       order: orderId,
-      client: req.user._id,
+      customer: req.user._id,
+      customerName: req.user.fullName || req.user.name || "عميل",
+      orderCode: orderId.toString(),
       rating: Math.min(5, Math.max(1, parseInt(rating))),
       comment,
     });

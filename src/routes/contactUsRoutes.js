@@ -3,6 +3,7 @@ const router = express.Router();
 const { submitContactRequest } = require('../controllers/contactUsController');
 
 // Public route - anyone can submit
+router.post('/', submitContactRequest);
 router.post('/submit', submitContactRequest);
 
 module.exports = router;
