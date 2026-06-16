@@ -348,11 +348,13 @@
 const Order = require("../../models/orderModel");
 const OrderItem = require("../../models/orderItemModel");
 
+// providerOnlyMiddleware sets req.shop — use req.shop._id (LaundryShop._id) not req.user._id
+// Orders store provider = LaundryShop._id, so filtering by user._id would return nothing
+
 const getOrders = async (req, res) => {
   try {
-    const providerId = req.user._id;
     const { status } = req.query;
-    const filter = { provider: providerId };
+    const filter = { provider: req.shop._id };
     if (status) filter.status = status;
 
     const orders = await Order.find(filter)
@@ -368,11 +370,10 @@ const getOrders = async (req, res) => {
 
 const getTodayReport = async (req, res) => {
   try {
-    const providerId = req.user._id;
     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
     const endOfDay = new Date(); endOfDay.setUTCHours(23, 59, 59, 999);
 
-    const orders = await Order.find({ provider: providerId, createdAt: { $gte: startOfDay, $lte: endOfDay } });
+    const orders = await Order.find({ provider: req.shop._id, createdAt: { $gte: startOfDay, $lte: endOfDay } });
     const totalRevenue = orders.filter((o) => o.status === "delivered").reduce((sum, o) => sum + o.total_price, 0);
 
     res.status(200).json({
@@ -391,16 +392,17 @@ const getTodayReport = async (req, res) => {
 
 const getOrderById = async (req, res) => {
   try {
-    const providerId = req.user._id;
-    const order = await Order.findOne({ _id: req.params.id, provider: providerId })
+    const order = await Order.findOne({ _id: req.params.id, provider: req.shop._id })
       .populate("client", "fullName name phone")
-      .populate("address", "address")
       .populate("delivery", "name phone");
 
     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });
 
+    // OrderItem.service refs ProviderService → populate its nested .service to get the Service name
     const items = await OrderItem.find({ order: order._id }).populate({
-      path: "service", select: "name parent", populate: { path: "parent", select: "name" },
+      path: "service",
+      select: "service price unit",
+      populate: { path: "service", select: "name" },
     });
 
     res.status(200).json({ success: true, data: { ...order.toObject(), items } });
@@ -411,9 +413,8 @@ const getOrderById = async (req, res) => {
 
 const acceptOrder = async (req, res) => {
   try {
-    const providerId = req.user._id;
     const order = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, provider: providerId, status: "pending" },
+      { _id: req.params.orderId, provider: req.shop._id, status: "pending" },
       { status: "accepted" }, { new: true }
     );
     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود أو مش جديد" });
@@ -425,12 +426,11 @@ const acceptOrder = async (req, res) => {
 
 const rejectOrder = async (req, res) => {
   try {
-    const providerId = req.user._id;
     const { cancel_reason } = req.body;
     if (!cancel_reason) return res.status(400).json({ success: false, message: "لازم تبعت سبب الرفض" });
 
     const order = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, provider: providerId, status: "pending" },
+      { _id: req.params.orderId, provider: req.shop._id, status: "pending" },
       { status: "cancelled", cancel_reason }, { new: true }
     );
     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });
@@ -442,13 +442,12 @@ const rejectOrder = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const providerId = req.user._id;
     const { status } = req.body;
     const allowedStatuses = ["accepted", "in_progress", "ready", "out_for_delivery", "delivered", "cancelled"];
     if (!allowedStatuses.includes(status)) return res.status(400).json({ success: false, message: "حالة غير صحيحة" });
 
     const order = await Order.findOneAndUpdate(
-      { _id: req.params.orderId, provider: providerId },
+      { _id: req.params.orderId, provider: req.shop._id },
       { status }, { new: true }
     );
     if (!order) return res.status(404).json({ success: false, message: "الطلب مش موجود" });

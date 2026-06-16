@@ -1,9 +1,11 @@
- const rateLimit = require("express-rate-limit");
+const rateLimit = require("express-rate-limit");
 
-// ─── General API Rate Limit  
+const isDev = process.env.NODE_ENV !== "production";
+
+// ─── General API Rate Limit
 exports.apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  windowMs: 15 * 60 * 1000,
+  max: isDev ? 10000 : 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -12,10 +14,10 @@ exports.apiLimiter = rateLimit({
   },
 });
 
-// ─── Auth Rate Limit (stricter)  
+// ─── Auth Rate Limit (stricter)
 exports.authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10,
+  windowMs: 15 * 60 * 1000,
+  max: isDev ? 10000 : 10,
   standardHeaders: true,
   legacyHeaders: false,
   message: {

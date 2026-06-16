@@ -325,9 +325,9 @@ exports.approveLaundry = async (req, res, next) => {
 
     const laundry = await LaundryShop.findOneAndUpdate(
       { _id: id, is_verified: false },
-      { is_verified: true },
+      { is_verified: true, is_active: true },
       { new: true }
-    ).select("name is_verified");
+    ).select("name is_verified is_active");
 
     if (!laundry) {
       return res.status(404).json({ status: "fail", message: "Laundry not found or already approved" });

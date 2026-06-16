@@ -4,9 +4,6 @@ const ProviderService = require("../../models/providerServiceModel.js");
 const Review = require("../../models/reviewModel.js");
 const Order = require("../../models/orderModel.js");
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-/** Haversine distance in km between two lat/lng points */
 const haversine = (lat1, lng1, lat2, lng2) => {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -19,7 +16,6 @@ const haversine = (lat1, lng1, lat2, lng2) => {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 };
 
-/** Map numeric avg_price to price tier string */
 const priceTier = (avg) => {
   if (!avg) return null;
   if (avg < 30) return "$";
@@ -27,33 +23,29 @@ const priceTier = (avg) => {
   return "$$$";
 };
 
-// ─── GET /api/shops  (Explore page) ─────────────────────────────────────────
 const getShops = async (req, res) => {
   try {
     let {
-      lat,
-      lng,
+      lat, lng,
       max_distance = 15,
-      services,
-      price_range,
-      fast_delivery,
+      services, price_range, fast_delivery,
       sort_by = "rating",
-      page = 1,
-      limit = 10,
-      search, // نص البحث عن العنوان أو اسم المغسلة 🔍
+      page = 1, limit = 10,
+      search,
     } = req.query;
 
-    // 1. ميزة البحث الذكي: إذا كتب المستخدم عنواناً نصياً ولم يرسل إحداثيات GPS صريحة
     if (search && (!lat || !lng)) {
-      // البحث داخل كوليكشن الـ addresses عن العنوان المطابق
-      const foundAddress = await mongoose.model("Address").findOne({
-        address: { $regex: search, $options: "i" }
-      });
-      
-      // إذا عثرنا على العنوان، نأخذ الإحداثيات الخاصة به تلقائياً ونعتمدها لحساب المسافة
-      if (foundAddress) {
-        lat = foundAddress.lat;
-        lng = foundAddress.lng;
+      try {
+        const Address = mongoose.models["Address"] || mongoose.model("Address");
+        const foundAddress = await Address.findOne({
+          address: { $regex: search, $options: "i" }
+        });
+        if (foundAddress?.lat && foundAddress?.lng) {
+          lat = foundAddress.lat;
+          lng = foundAddress.lng;
+        }
+      } catch (_) {
+        // Address model not loaded — fall back to text search only
       }
     }
 
@@ -61,18 +53,19 @@ const getShops = async (req, res) => {
     const userLng = parseFloat(lng);
     const maxDist = parseFloat(max_distance);
 
-    // ── Base match: only verified shops ──────────────────────────────────
-    const matchStage = { is_verified: true };
+    // Only show admin-verified shops that are not suspended
+    const matchStage = {
+      is_verified:  true,
+      is_suspended: { $ne: true },
+    };
 
-    // 2. إذا لم نجد إحداثيات للعنوان المكتوب، نفلتر كفلترة نصية عادية داخل المغاسل المسجلة
-    if (search && (isNaN(userLat) || isNaN(userLng))) {
+    if (search) {
       matchStage.$or = [
         { name: { $regex: search, $options: "i" } },
         { address: { $regex: search, $options: "i" } }
       ];
     }
 
-    // ── Service filter ───────────────────────────────────────────────────
     let shopIdsWithServices = null;
     if (services) {
       const serviceIds = services.split(",").map((s) => new mongoose.Types.ObjectId(s.trim()));
@@ -87,17 +80,11 @@ const getShops = async (req, res) => {
       matchStage._id = { $in: shopIdsWithServices };
     }
 
-    // ── Fetch shops with aggregated stats ────────────────────────────────
     const shops = await LaundryShop.aggregate([
       { $match: matchStage },
-
-      // Join reviews to get avg rating + count
       {
         $lookup: {
-          from: "reviews",
-          localField: "_id",
-          foreignField: "provider",
-          as: "reviews",
+          from: "reviews", localField: "_id", foreignField: "provider", as: "reviews",
         },
       },
       {
@@ -106,14 +93,9 @@ const getShops = async (req, res) => {
           review_count: { $size: "$reviews" },
         },
       },
-
-      // Join provider_services to get avg price
       {
         $lookup: {
-          from: "providerservices",
-          localField: "_id",
-          foreignField: "provider",
-          as: "provider_services",
+          from: "providerservices", localField: "_id", foreignField: "provider", as: "provider_services",
         },
       },
       {
@@ -122,28 +104,19 @@ const getShops = async (req, res) => {
           service_ids: "$provider_services.service",
         },
       },
-
-      // Join services to get service names
       {
         $lookup: {
-          from: "services",
-          localField: "service_ids",
-          foreignField: "_id",
-          as: "services_offered",
+          from: "services", localField: "service_ids", foreignField: "_id", as: "services_offered",
         },
       },
-
-      // Clean up heavy arrays
       { $project: { reviews: 0, provider_services: 0, service_ids: 0 } },
     ]);
 
-    // ── Post-aggregate: distance, price tier, fast delivery ──────────────
     let enriched = shops.map((shop) => {
       const distance =
         !isNaN(userLat) && !isNaN(userLng) && shop.lat && shop.lng
           ? haversine(userLat, userLng, shop.lat, shop.lng)
           : null;
-
       return {
         ...shop,
         distance_km: distance !== null ? parseFloat(distance.toFixed(1)) : null,
@@ -153,27 +126,25 @@ const getShops = async (req, res) => {
       };
     });
 
-    // ── Distance filter ──────────────────────────────────────────────────
     if (!isNaN(userLat) && !isNaN(userLng)) {
       enriched = enriched.filter(
-        (s) => s.distance_km === null || s.distance_km <= maxDist
+        (s) => s.distance_km !== null && s.distance_km <= maxDist
       );
     }
 
-    // ── Price range filter ───────────────────────────────────────────────
     const priceMap = { economy: "$", medium: "$$", luxury: "$$$" };
     if (price_range && priceMap[price_range]) {
       enriched = enriched.filter((s) => s.price_tier === priceMap[price_range]);
     }
 
-    // ── Fast delivery filter ─────────────────────────────────────────────
     if (fast_delivery === "true") {
       enriched = enriched.filter((s) => s.fast_delivery_available === true);
     }
 
-    // ── Sorting ──────────────────────────────────────────────────────────
     if (sort_by === "rating") {
       enriched.sort((a, b) => (b.avg_rating || 0) - (a.avg_rating || 0));
+    } else if (sort_by === "reviews") {
+      enriched.sort((a, b) => (b.review_count || 0) - (a.review_count || 0));
     } else if (sort_by === "distance") {
       enriched.sort((a, b) => (a.distance_km ?? Infinity) - (b.distance_km ?? Infinity));
     } else if (sort_by === "price_asc") {
@@ -182,24 +153,17 @@ const getShops = async (req, res) => {
       enriched.sort((a, b) => (b.avg_price || 0) - (a.avg_price || 0));
     }
 
-    // ── Pagination ───────────────────────────────────────────────────────
     const total = enriched.length;
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const paginated = enriched.slice((pageNum - 1) * limitNum, pageNum * limitNum);
 
-    res.json({
-      total,
-      page: pageNum,
-      pages: Math.ceil(total / limitNum),
-      shops: paginated,
-    });
+    res.json({ total, page: pageNum, pages: Math.ceil(total / limitNum), shops: paginated });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// ─── GET /api/shops/:id  (Shop detail) ──────────────────────────────────────
 const getShopById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -208,13 +172,11 @@ const getShopById = async (req, res) => {
     const shop = await LaundryShop.findById(id);
     if (!shop) return res.status(404).json({ message: "Shop not found" });
 
-    // Services offered
     const providerServices = await ProviderService.find({
       provider: shop._id,
       is_active: true,
     }).populate({ path: "service", populate: { path: "parent", select: "name" } });
 
-    // Reviews (latest 10)
     const reviews = await Review.find({ provider: shop._id })
       .populate("customer", "fullName name")
       .sort({ createdAt: -1 })
@@ -254,7 +216,6 @@ const getShopById = async (req, res) => {
   }
 };
 
-// ─── POST /api/shops  (Provider creates shop) ───────────────────────────────
 const createShop = async (req, res) => {
   try {
     const { name, description, address, lat, lng } = req.body;
@@ -273,7 +234,6 @@ const createShop = async (req, res) => {
   }
 };
 
-// ─── PUT /api/shops/:id  (Provider updates own shop) ────────────────────────
 const updateShop = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
@@ -289,7 +249,6 @@ const updateShop = async (req, res) => {
   }
 };
 
-// ─── GET /api/shops/:id/services  (Services of a shop) ──────────────────────
 const getShopServices = async (req, res) => {
   try {
     const services = await ProviderService.find({
@@ -303,7 +262,6 @@ const getShopServices = async (req, res) => {
   }
 };
 
-// ─── POST /api/shops/:id/services  (Provider adds service) ──────────────────
 const addShopService = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
@@ -324,7 +282,6 @@ const addShopService = async (req, res) => {
   }
 };
 
-// ─── DELETE /api/shops/:id/services/:psId  (Provider removes service) ───────
 const removeShopService = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ _id: req.params.id, user: req.user._id });
@@ -337,7 +294,6 @@ const removeShopService = async (req, res) => {
   }
 };
 
-// ─── GET /api/shops/:id/reviews ──────────────────────────────────────────────
 const getShopReviews = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -354,7 +310,6 @@ const getShopReviews = async (req, res) => {
   }
 };
 
-// ─── GET /api/shops/my  (Provider: get own shop) ─────────────────────────────
 const getMyShop = async (req, res) => {
   try {
     const shop = await LaundryShop.findOne({ user: req.user._id });
@@ -365,7 +320,6 @@ const getMyShop = async (req, res) => {
   }
 };
 
-// ─── GET /api/shops/:id/dashboard  (Provider analytics) ─────────────────────
 const getShopDashboard = async (req, res) => {
   try {
     const shopId = req.params.id;
